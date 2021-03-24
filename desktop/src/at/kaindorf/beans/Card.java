@@ -10,13 +10,6 @@ public class Card {
     int costStone;
     int costFood;
 
-    /**
-     * ToDo: Das man die Cards Craftet und zu Liste Hinzufügt
-     */
-    public void build(){
-
-    }
-
     public Card(int costWood, int costStone, int costFood) {
         this.costWood = costWood;
         this.costStone = costStone;
