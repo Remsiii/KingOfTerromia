@@ -31,7 +31,9 @@ public class MenuScreen extends ScreenAdapter {
         batch.begin();
         font.draw(batch, "Press to Start",200,200);
         batch.end();
-
+        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
+            KingOfTerromia.INSTANCE.setScreen(new GameScreen());
+        }
     }
 
     @Override
