@@ -5,12 +5,12 @@ package at.kaindorf.beans;
  * @date: 24.03.2021
  * @project: KingOfTerromia
  */
-public class Game {
+public class GameBeans {
     private Player player;
     private Bot bot;
     private int aktRound;
 
-    public Game(Player player, Bot bot, int aktRound) {
+    public GameBeans(Player player, Bot bot, int aktRound) {
         this.player = player;
         this.bot = bot;
         this.aktRound = aktRound;
