@@ -122,4 +122,24 @@ public class PlayGame {
     public Player getPlayer() {
         return player;
     }
+
+    public Bot getBot() {
+        return bot;
+    }
+
+    public GameBeans getGame() {
+        return game;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
+
+    public void setGame(GameBeans game) {
+        this.game = game;
+    }
 }
