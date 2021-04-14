@@ -23,13 +23,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class MenuScreen extends ScreenAdapter {
 
     SpriteBatch batch;
-    Texture img;
+    Texture img,play,quit,opt;
     private Stage stage = new Stage();
     ImageButton start,neuesSpiel,option,beenden;
 
     public MenuScreen() {
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
+        play = new Texture("play.png");
+        quit = new Texture("quit.png");
+        opt = new Texture("opt.png");
     }
 
     @Override
@@ -48,12 +51,19 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        start = new ImageButton(new TextureRegionDrawable(new TextureRegion(img)));
-        beenden = new ImageButton(new TextureRegionDrawable(new TextureRegion(img)));
-        start.setPosition(960,700);
-        beenden.setPosition(960,200);
+        start = new ImageButton(new TextureRegionDrawable(new TextureRegion(play)));
+        beenden = new ImageButton(new TextureRegionDrawable(new TextureRegion(quit)));
+        option = new ImageButton(new TextureRegionDrawable(new TextureRegion(opt)));
+        start.setPosition(800,900);
+        start.setSize(405,108);
+        option.setPosition(800,700);
+        option.setSize(405,108);
+        beenden.setPosition(800,500);
+        beenden.setSize(405,108);
+
         stage.addActor(start);
         stage.addActor(beenden);
+        stage.addActor(option);
         Gdx.input.setInputProcessor(stage);
 
         start.addListener(new ClickListener() {
@@ -67,6 +77,12 @@ public class MenuScreen extends ScreenAdapter {
                 System.exit(0);
             }
         });
+
+        option.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                KingOfTerromia.INSTANCE.setScreen(new OptionScreen());
+            }
+        });
     }
 
     @Override
@@ -74,6 +90,8 @@ public class MenuScreen extends ScreenAdapter {
         batch.dispose();
         img.dispose();
         stage.dispose();
+        play.dispose();
+        opt.dispose();
     }
 
     @Override
