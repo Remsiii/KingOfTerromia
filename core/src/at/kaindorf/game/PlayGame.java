@@ -36,24 +36,120 @@ public class PlayGame {
         game.setAktRound(game.getAktRound()+1);
 
         List<Card> handCards = new LinkedList<>();
-        handCards.add(randomResCard());
-        handCards.add(randomResCard());
-        handCards.add(randomDefCard());
-        handCards.add(randomAttackCard());
-
-        //Zufall ob es am Anfang zwei AttackKarten oder zwei DefKarten geben soll
         Random rand = new Random();
-        int zz = rand.nextInt(2)+1;
-
-        if(zz==1)
+        if(game.getAktRound() < 10)
         {
+            handCards.add(randomResCard());
+            handCards.add(randomResCard());
             handCards.add(randomDefCard());
+            handCards.add(randomAttackCard());
+
+            //Zufall ob es am Anfang zwei AttackKarten oder zwei DefKarten geben soll
+            int zz = rand.nextInt(2)+1;
+
+            if(zz==1)
+            {
+                handCards.add(randomDefCard());
+            }
+            else
+            {
+                handCards.add(randomAttackCard());
+            }
+        }
+        else if(game.getAktRound() >= 10 && game.getAktRound() < 20)
+        {
+            handCards.add(randomResCard());
+            handCards.add(randomDefCard());
+            handCards.add(randomAttackCard());
+
+            //Zufall ob Attack oder Defense Karte
+            for (int i = 0; i < 2; i++) {
+                int zz = rand.nextInt(2)+1;
+                if(zz==1)
+                {
+                    handCards.add(randomDefCard());
+                }
+                else
+                {
+                    handCards.add(randomAttackCard());
+                }
+            }
         }
         else
         {
+            handCards.add(randomDefCard());
             handCards.add(randomAttackCard());
+            //Zufall ob Attack oder Defense Karte
+            for (int i = 0; i < 2; i++) {
+                int zz = rand.nextInt(2)+1;
+                if(zz==1)
+                {
+                    handCards.add(randomDefCard());
+                }
+                else
+                {
+                    handCards.add(randomAttackCard());
+                }
+            }
+            int zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: handCards.add(randomDefCard());
+                    break;
+                case 2: handCards.add(randomAttackCard());
+                    break;
+                default: handCards.add(0,randomResCard());
+            }
         }
 
+        //Karten die der Bot spielt
+        List<Card> botPlayedCards = new LinkedList<>();
+        if(game.getAktRound() < 4)
+        {
+            botPlayedCards.add(randomDefCard());
+        }
+        else if(game.getAktRound() >= 4 && game.getAktRound() < 10)
+        {
+            botPlayedCards.add(randomDefCard());
+            botPlayedCards.add(randomAttackCard());
+        }
+        else if(game.getAktRound() >= 10 && game.getAktRound() < 20)
+        {
+            botPlayedCards.add(randomDefCard());
+            botPlayedCards.add(randomAttackCard());
+            int zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: botPlayedCards.add(randomDefCard());
+                    break;
+                case 2: botPlayedCards.add(randomAttackCard());
+            }
+        }
+        else
+        {
+            botPlayedCards.add(randomDefCard());
+            botPlayedCards.add(randomAttackCard());
+            int zz = rand.nextInt(2)+1;
+            if(zz==1)
+            {
+                botPlayedCards.add(randomDefCard());
+            }
+            else
+            {
+                botPlayedCards.add(randomAttackCard());
+            }
+            zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: botPlayedCards.add(randomDefCard());
+                    break;
+                case 2: botPlayedCards.add(randomAttackCard());
+            }
+        }
+
+
+
+        bot.setAktCards(botPlayedCards);
         player.setHandCards(handCards);
     }
 
