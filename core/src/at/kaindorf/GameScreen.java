@@ -63,16 +63,8 @@ public class GameScreen extends ScreenAdapter {
         for (int i = 0; i < (""+playGame.getGame().getAktRound()).length(); i++) {
             batch.draw(round.get(i), Gdx.graphics.getWidth()-(50*(i+1)), Gdx.graphics.getHeight()-50,50,50);
         }
-        int stelleHp = -50;
-        for (Texture texture : hpPlayer) {
-            stelleHp += 50;
-            batch.draw(texture, stelleHp, 0,50,50);
-        }
-        stelleHp = -50;
-        for (Texture texture : hpPlayer) {
-            stelleHp += 50;
-            batch.draw(texture, stelleHp, Gdx.graphics.getHeight()-50,50,50);
-        }
+        updateHpPlayer();
+        updateHpBot();
         stage.draw();
         stage.act(delta);
         nextRoundIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextRoundButton)));
@@ -221,8 +213,61 @@ public class GameScreen extends ScreenAdapter {
         playedCardsBot.clear();
 
         playGame.startNextRound();
+
+        playGame.getGame().getPlayer().setHp(101);
+        playGame.getGame().getBot().setHp(playGame.getGame().getBot().getHp()-10);
+
         setHandCards(playGame.getPlayer().getHandCards(), 1);
         setHandCards(playGame.getBot().getAktCards(), 2);
         batch.end();
+    }
+
+    /**
+     * Spieler HP Updaten
+     */
+    public void updateHpPlayer()
+    {
+
+        int aktHp = playGame.getGame().getPlayer().getHp();
+
+        int aktHpCount = aktHp;
+        hpPlayer.clear();
+
+        for (int i = 0; i < (""+aktHpCount).length(); i++) {
+            int aktNumber = aktHp%10;
+            hpPlayer.add(0,new Texture("rounds/"+aktNumber+  ".png"));
+            aktHp = aktHp / 10;
+        }
+
+        int stelleHp = -50;
+        for (Texture texture : hpPlayer) {
+            stelleHp += 50;
+            batch.draw(texture, stelleHp, 0,50,50);
+        }
+    }
+
+    /**
+     * Spieler HP Updaten
+     */
+    public void updateHpBot()
+    {
+
+        int aktHp = playGame.getGame().getBot().getHp();
+
+        int aktHpCount = aktHp;
+        hpBot.clear();
+
+        for (int i = 0; i < (""+aktHpCount).length(); i++) {
+            int aktNumber = aktHp%10;
+            hpBot.add(0,new Texture("rounds/"+aktNumber+  ".png"));
+            aktHp = aktHp / 10;
+        }
+
+        int stelleHp = -50;
+        for (Texture texture : hpBot) {
+            stelleHp += 50;
+            batch.draw(texture, stelleHp, Gdx.graphics.getHeight()-50,50,50);
+        }
+
     }
 }
