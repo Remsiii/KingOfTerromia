@@ -1,16 +1,11 @@
 package at.kaindorf;
 
 import at.kaindorf.beans.*;
-import at.kaindorf.enums.AttackCardTypes;
 import at.kaindorf.game.PlayGame;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -39,10 +34,19 @@ public class GameScreen extends ScreenAdapter {
     private PlayGame playGame = new PlayGame();
     private ImageButton nextRoundIB;
     private Stage stage = new Stage();
+    private List<Texture> aktFoodList = new LinkedList<>();
+    private List<Texture> aktStoneList = new LinkedList<>();
+    private List<Texture> aktWoodList = new LinkedList<>();
+    private Texture iconFood;
+    private Texture iconWood;
+    private Texture iconStone;
 
     public GameScreen() {
         batch = new SpriteBatch();
-        nextRoundButton = new Texture("badlogic.jpg");
+        nextRoundButton = new Texture("next_Round_button.png");
+        iconFood = new Texture("bread.png");
+        iconWood = new Texture("wood.png");
+        iconStone = new Texture("stone.png");
         hpBot.add(new Texture("rounds/2.png"));
         hpBot.add(new Texture("rounds/0.png"));
         hpBot.add(new Texture("rounds/0.png"));
@@ -50,8 +54,8 @@ public class GameScreen extends ScreenAdapter {
         hpPlayer.add(new Texture("rounds/0.png"));
         hpPlayer.add(new Texture("rounds/0.png"));
         round.add(new Texture("rounds/1.png"));
-        setHandCards(playGame.getPlayer().getHandCards(),1);
-        setHandCards(playGame.getBot().getAktCards(),2);
+        setPlayCards(playGame.getPlayer().getHandCards(),1);
+        setPlayCards(playGame.getBot().getAktCards(),2);
 
     }
 
@@ -61,15 +65,19 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         for (int i = 0; i < (""+playGame.getGame().getAktRound()).length(); i++) {
-            batch.draw(round.get(i), Gdx.graphics.getWidth()-(50*(i+1)), Gdx.graphics.getHeight()-50,50,50);
+                batch.draw(round.get(i), Gdx.graphics.getWidth()-(50*(i+1)), Gdx.graphics.getHeight()-60,50,50);
         }
         updateHpPlayer();
         updateHpBot();
+        updateResourcenAnzeige();
         stage.draw();
         stage.act(delta);
+
         nextRoundIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextRoundButton)));
-        nextRoundIB.setPosition(Gdx.graphics.getWidth()-405,0);
-        nextRoundIB.setSize(405,108);
+        nextRoundIB.setSize(300,200);
+        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),0);
+
+
         nextRoundIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 nextRound();
@@ -96,7 +104,7 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Handkarten setzten
      */
-    public void setHandCards(List<Card> cardsList, int type)
+    public void setPlayCards(List<Card> cardsList, int type)
     {
         //Schauen welche Handkarten er hat und diese auswählen
         for (Card card: cardsList) {
@@ -167,7 +175,7 @@ public class GameScreen extends ScreenAdapter {
         int testZahl = - 720;
         for (Texture hcards : handCardsPlayer) {
             testZahl = testZahl + 240;
-            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()/2 - 300.0f, 240.0f, 300.0f);
+            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, 0, 240.0f, 300.0f);
         }
     }
 
@@ -214,16 +222,13 @@ public class GameScreen extends ScreenAdapter {
 
         playGame.startNextRound();
 
-        playGame.getGame().getPlayer().setHp(101);
-        playGame.getGame().getBot().setHp(playGame.getGame().getBot().getHp()-10);
-
-        setHandCards(playGame.getPlayer().getHandCards(), 1);
-        setHandCards(playGame.getBot().getAktCards(), 2);
+        setPlayCards(playGame.getPlayer().getHandCards(), 1);
+        setPlayCards(playGame.getBot().getAktCards(), 2);
         batch.end();
     }
 
     /**
-     * Spieler HP Updaten
+     * Spieler HP Anzeige Updaten
      */
     public void updateHpPlayer()
     {
@@ -239,19 +244,18 @@ public class GameScreen extends ScreenAdapter {
             aktHp = aktHp / 10;
         }
 
-        int stelleHp = -50;
+        int stelleHp = -40;
         for (Texture texture : hpPlayer) {
             stelleHp += 50;
-            batch.draw(texture, stelleHp, 0,50,50);
+            batch.draw(texture, stelleHp, 10,50,50);
         }
     }
 
     /**
-     * Spieler HP Updaten
+     * Bot HP Anzeige Updaten
      */
     public void updateHpBot()
     {
-
         int aktHp = playGame.getGame().getBot().getHp();
 
         int aktHpCount = aktHp;
@@ -263,11 +267,66 @@ public class GameScreen extends ScreenAdapter {
             aktHp = aktHp / 10;
         }
 
-        int stelleHp = -50;
+        int stelleHp = -40;
         for (Texture texture : hpBot) {
             stelleHp += 50;
-            batch.draw(texture, stelleHp, Gdx.graphics.getHeight()-50,50,50);
+            batch.draw(texture, stelleHp, Gdx.graphics.getHeight()-60,50,50);
+        }
+    }
+
+    /**
+     * Update Resourcen Anzeige
+     */
+    public void updateResourcenAnzeige()
+    {
+        int aktFood = playGame.getGame().getPlayer().getAktFood();
+        int aktStone = playGame.getGame().getPlayer().getAktStone();
+        int aktWood = playGame.getGame().getPlayer().getAktWood();
+
+        int aktFoodCount = aktFood;
+        int aktStoneCount = aktStone;
+        int aktWoodCount = aktWood;
+
+        aktFoodList.clear();
+        aktStoneList.clear();
+        aktWoodList.clear();
+
+        for (int i = 0; i < (""+aktFoodCount).length(); i++) {
+            int aktNumber = aktFood%10;
+            aktFoodList.add(0,new Texture("rounds/"+aktNumber+  ".png"));
+            aktFood = aktFood / 10;
+        }
+        for (int i = 0; i < (""+aktStoneCount).length(); i++) {
+            int aktNumber = aktStone%10;
+            aktStoneList.add(0,new Texture("rounds/"+aktNumber+  ".png"));
+            aktStone = aktStone / 10;
+        }
+        for (int i = 0; i < (""+aktWoodCount).length(); i++) {
+            int aktNumber = aktWood%10;
+            aktWoodList.add(0,new Texture("rounds/"+aktNumber+  ".png"));
+            aktWood = aktWood / 10;
         }
 
+        int stelle = 40;
+        batch.draw(iconFood, stelle, Gdx.graphics.getHeight()/2/2+60,50,50);
+        stelle += 15;
+        for (Texture texture : aktFoodList) {
+            stelle += 40;
+            batch.draw(texture, stelle, Gdx.graphics.getHeight()/2/2+60,40,40);
+        }
+        stelle = 40;
+        batch.draw(iconStone, stelle, Gdx.graphics.getHeight()/2/2-60,50,50);
+        stelle += 15;
+        for (Texture texture : aktStoneList) {
+            stelle += 40;
+            batch.draw(texture, stelle, Gdx.graphics.getHeight()/2/2-60,40,40);
+        }
+        stelle = 40;
+        batch.draw(iconWood, stelle, Gdx.graphics.getHeight()/2/2,50,50);
+        stelle += 15;
+        for (Texture texture : aktWoodList) {
+            stelle += 40;
+            batch.draw(texture, stelle, Gdx.graphics.getHeight()/2/2,40,40);
+        }
     }
 }
