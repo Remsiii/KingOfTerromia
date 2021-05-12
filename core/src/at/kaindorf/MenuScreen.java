@@ -3,8 +3,11 @@ package at.kaindorf;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,8 +15,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import java.awt.*;
 
 /**
  * @author: Meister Michael
@@ -23,16 +29,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class MenuScreen extends ScreenAdapter {
 
     SpriteBatch batch;
-    Texture img,play,quit,opt;
+    Texture img,play,quit,opt,logo,cursor;
     private Stage stage = new Stage();
-    ImageButton start,neuesSpiel,option,beenden;
+    ImageButton start,option,beenden,logoBt;
+    public static Music music = Gdx.audio.newMusic(Gdx.files.internal("MainMenuOST.mp3"));
+    Sound clickEffect;
 
     public MenuScreen() {
+        music.play();
+        music.setLooping(true);
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
         play = new Texture("play.png");
         quit = new Texture("quit.png");
         opt = new Texture("opt.png");
+        logo = new Texture("KOT_Logo.png");
+        cursor = new Texture(("cursor.png"));
+        clickEffect = Gdx.audio.newSound(Gdx.files.internal("click.mp3"));
+
     }
 
     @Override
@@ -54,32 +68,46 @@ public class MenuScreen extends ScreenAdapter {
         start = new ImageButton(new TextureRegionDrawable(new TextureRegion(play)));
         beenden = new ImageButton(new TextureRegionDrawable(new TextureRegion(quit)));
         option = new ImageButton(new TextureRegionDrawable(new TextureRegion(opt)));
-        start.setPosition(800,900);
-        start.setSize(405,108);
-        option.setPosition(800,700);
-        option.setSize(405,108);
-        beenden.setPosition(800,500);
-        beenden.setSize(405,108);
+        logoBt = new ImageButton(new TextureRegionDrawable(new TextureRegion(logo)));
 
-        stage.addActor(start);
-        stage.addActor(beenden);
-        stage.addActor(option);
+        Table menuTable = new Table();
+        menuTable.add(logoBt);
+        menuTable.row();
+        menuTable.add(start).width(start.getWidth()*0.3f).height(start.getHeight()*0.3f)
+                .padTop(Gdx.graphics.getHeight()/10);
+        menuTable.row();
+        menuTable.add(option).width(option.getWidth()*0.3f).height(option.getHeight()*0.3f)
+                .padTop(Gdx.graphics.getHeight()/10);
+        menuTable.row();
+        menuTable.add(beenden).width(beenden.getWidth()*0.3f).height(beenden.getHeight()*0.3f)
+                .padTop(Gdx.graphics.getHeight()/10);
+        menuTable.setFillParent(true);
+        stage.addActor(menuTable);
+
+        Pixmap pm = new Pixmap(Gdx.files.internal("cursor.png"));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+        pm.dispose();
+
+
         Gdx.input.setInputProcessor(stage);
 
         start.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                clickEffect.play();
                 KingOfTerromia.INSTANCE.setScreen(new GameScreen());
             }
         });
 
         beenden.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                clickEffect.play();
                 System.exit(0);
             }
         });
 
         option.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                clickEffect.play();
                 KingOfTerromia.INSTANCE.setScreen(new OptionScreen());
             }
         });
@@ -98,6 +126,5 @@ public class MenuScreen extends ScreenAdapter {
     public void hide() {
         this.dispose();
     }
-
 
 }
