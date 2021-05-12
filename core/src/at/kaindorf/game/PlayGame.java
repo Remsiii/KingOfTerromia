@@ -5,6 +5,7 @@ import at.kaindorf.enums.AttackCardTypes;
 import at.kaindorf.enums.DefenseCardTypes;
 import at.kaindorf.enums.RessourceCardTypes;
 import at.kaindorf.enums.RessourceTypes;
+import com.badlogic.gdx.graphics.Texture;
 import sun.awt.image.ImageWatched;
 
 import java.util.LinkedList;
@@ -37,7 +38,11 @@ public class PlayGame {
 
         List<Card> handCards = new LinkedList<>();
         Random rand = new Random();
-        if(game.getAktRound() < 10)
+        if(game.getAktRound() == 1)
+        {
+            handCards.add(new RessourceCard(10,0,0,10, RessourceTypes.WOOD, RessourceCardTypes.LUMBERJACKHUT));
+        }
+        else if(game.getAktRound() < 10)
         {
             handCards.add(randomResCard());
             handCards.add(randomResCard());
@@ -104,7 +109,11 @@ public class PlayGame {
 
         //Karten die der Bot spielt
         List<Card> botPlayedCards = new LinkedList<>();
-        if(game.getAktRound() < 4)
+        if(game.getAktRound() == 1)
+        {
+
+        }
+        else if(game.getAktRound() < 4)
         {
             botPlayedCards.add(randomDefCard());
         }
@@ -147,7 +156,22 @@ public class PlayGame {
             }
         }
 
-
+        for (Card card:player.getPlayerCards()) {
+            if(card instanceof RessourceCard)
+            {
+                switch (((RessourceCard) card).getRessourceCardType())
+                {
+                    case HUNTERHUT:
+                            player.setAktFood(player.getAktFood()+7);
+                        break;
+                    case LUMBERJACKHUT:
+                            player.setAktWood(player.getAktWood()+10);
+                        break;
+                    case STONEMINE:
+                            player.setAktStone(player.getAktStone()+5);
+                }
+            }
+        }
 
         bot.setAktCards(botPlayedCards);
         player.setHandCards(handCards);
