@@ -33,6 +33,7 @@ public class GameScreen extends ScreenAdapter {
     private List<Texture> round = new LinkedList<>();
     private PlayGame playGame = new PlayGame();
     private ImageButton nextRoundIB;
+    private List<ImageButton> handCardsPlayerIB = new LinkedList<>();
     private Stage stage = new Stage();
     private List<Texture> aktFoodList = new LinkedList<>();
     private List<Texture> aktStoneList = new LinkedList<>();
@@ -40,6 +41,7 @@ public class GameScreen extends ScreenAdapter {
     private Texture iconFood;
     private Texture iconWood;
     private Texture iconStone;
+    private Texture background;
 
     public GameScreen() {
         batch = new SpriteBatch();
@@ -56,6 +58,7 @@ public class GameScreen extends ScreenAdapter {
         round.add(new Texture("rounds/1.png"));
         setPlayCards(playGame.getPlayer().getHandCards(),1);
         setPlayCards(playGame.getBot().getAktCards(),2);
+        background = new Texture("Hintergrund.png");
 
     }
 
@@ -64,6 +67,7 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
+        batch.draw(background, 0, 0 , Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         for (int i = 0; i < (""+playGame.getGame().getAktRound()).length(); i++) {
                 batch.draw(round.get(i), Gdx.graphics.getWidth()-(50*(i+1)), Gdx.graphics.getHeight()-60,50,50);
         }
@@ -83,9 +87,10 @@ public class GameScreen extends ScreenAdapter {
                 nextRound();
             }
         });
+
         stage.addActor(nextRoundIB);
         Gdx.input.setInputProcessor(stage);
-        printHandCards();
+        printHandCards(delta);
         printBotCards();
         batch.end();
     }
@@ -170,12 +175,31 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Handkarten anzeigen
      */
-    public void printHandCards()
+    public void printHandCards(float delta)
     {
+
         int testZahl = - 720;
+        int index = 0;
+        stage.draw();
+        stage.act(delta);
+
         for (Texture hcards : handCardsPlayer) {
             testZahl = testZahl + 240;
-            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, 0, 240.0f, 300.0f);
+            if(hcards==null)
+                break;
+            handCardsPlayerIB.add(index,new ImageButton(new TextureRegionDrawable(new TextureRegion(hcards))));
+            handCardsPlayerIB.get(index).setSize(240.0f, 300.0f);
+            handCardsPlayerIB.get(index).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, 0);
+            final int fIndex = index;
+            handCardsPlayerIB.get(index).addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y){
+                    clickedCard(fIndex);
+                }
+            });
+
+            stage.addActor(handCardsPlayerIB.get(index));
+            Gdx.input.setInputProcessor(stage);
+            index++;
         }
     }
 
@@ -196,6 +220,8 @@ public class GameScreen extends ScreenAdapter {
      */
     public void nextRound()
     {
+
+        stage = new Stage();
         int aktRound = playGame.getGame().getAktRound();
         aktRound++;
 
@@ -328,5 +354,23 @@ public class GameScreen extends ScreenAdapter {
             stelle += 40;
             batch.draw(texture, stelle, Gdx.graphics.getHeight()/2/2,40,40);
         }
+    }
+
+    //Wenn Karte geklickt wurde
+    public void clickedCard(int index)
+    {
+        //Index muss angepasst werden wenn Karte gespielt da sie ja gelöscht wird
+        Card card = playGame.getPlayer().getHandCards().get(index);
+        List<Card> aktHandCards = playGame.getPlayer().getHandCards();
+        aktHandCards.remove(index);
+        playGame.getPlayer().setHandCards(aktHandCards);
+        List<Card> aktPlayerCards = playGame.getPlayer().getPlayerCards();
+        aktPlayerCards.add(card);
+        playGame.getPlayer().setPlayerCards(aktPlayerCards);
+
+        //ToDo: Karte löschen (print HandCards) und oben rausschreiben dafür
+        //ToDo: Das man sie nur schreiben kann wenn man genug Resourcen hat und Resourcen Upgraden
+
+        handCardsPlayer.remove(index);
     }
 }
