@@ -9,15 +9,19 @@ import java.util.List;
  */
 public class Player {
     private int hp;
-    private List<Card> playerCards; //aktuell gecrafteden Karten
+    private List<Card> playerCardsRes;
+    private List<Card> playerCardsAttack;
+    private List<Card> playerCardsDef;
     private List<Card> handCards;
     private int aktWood;
     private int aktStone;
     private int aktFood;
 
-    public Player(int hp, List<Card> playerCards, List<Card> handCards, int aktWood, int aktStone, int aktFood) {
+    public Player(int hp, List<Card> playerCardsRes, List<Card> playerCardsAttack, List<Card> playerCardsDef, List<Card> handCards, int aktWood, int aktStone, int aktFood) {
         this.hp = hp;
-        this.playerCards = playerCards;
+        this.playerCardsRes = playerCardsRes;
+        this.playerCardsAttack = playerCardsAttack;
+        this.playerCardsDef = playerCardsDef;
         this.handCards = handCards;
         this.aktWood = aktWood;
         this.aktStone = aktStone;
@@ -32,12 +36,28 @@ public class Player {
         this.hp = hp;
     }
 
-    public List<Card> getPlayerCards() {
-        return playerCards;
+    public List<Card> getPlayerCardsRes() {
+        return playerCardsRes;
     }
 
-    public void setPlayerCards(List<Card> playerCards) {
-        this.playerCards = playerCards;
+    public void setPlayerCardsRes(List<Card> playerCardsRes) {
+        this.playerCardsRes = playerCardsRes;
+    }
+
+    public List<Card> getPlayerCardsAttack() {
+        return playerCardsAttack;
+    }
+
+    public void setPlayerCardsAttack(List<Card> playerCardsAttack) {
+        this.playerCardsAttack = playerCardsAttack;
+    }
+
+    public List<Card> getPlayerCardsDef() {
+        return playerCardsDef;
+    }
+
+    public void setPlayerCardsDef(List<Card> playerCardsDef) {
+        this.playerCardsDef = playerCardsDef;
     }
 
     public List<Card> getHandCards() {

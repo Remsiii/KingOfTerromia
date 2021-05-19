@@ -35,8 +35,8 @@ public class MenuScreen extends ScreenAdapter {
     private Stage stage = new Stage();
     ImageButton start,option,beenden,logoBt;
     public static Music music = Gdx.audio.newMusic(Gdx.files.internal("MainMenuOST.mp3"));
-    Sound clickEffect;
     private Skin skin;
+    public static Sound clickEffect;
 
     public MenuScreen() {
         music.play();

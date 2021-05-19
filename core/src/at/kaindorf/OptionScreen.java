@@ -22,6 +22,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 /**
  * @author: Meister Michael
  * @date: 14.04.2021
@@ -36,8 +40,8 @@ public class OptionScreen extends ScreenAdapter {
     Slider musicVol;
     BitmapFont font = new BitmapFont();
     TextField volume;
-    Texture mute,noMute;
-    ImageButton muteBt;
+    Texture mute,noMute, titleTex, background;
+    ImageButton muteBt, title;
     boolean isMute = true;
     public static boolean startW = false;
     private Texture backButton;
@@ -53,16 +57,24 @@ public class OptionScreen extends ScreenAdapter {
         volume = new TextField("",skin);
         mute = new Texture("mute.png");
         noMute = new Texture("noMute.png");
+        titleTex = new Texture("optionsHeading.png");
+        background = new Texture("optionScreenBackground.jpg");
     }
 
     @Override
     public void render(float delta) {
+        batch.begin();
+        stage.getBatch().begin();
+
+
         BitmapFont font = new BitmapFont();
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         font.setColor(Color.BLACK);
-        SpriteBatch batch = new SpriteBatch();
-        batch.begin();
+        //SpriteBatch batch = new SpriteBatch();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        stage.getBatch().end();
         stage.draw();
         stage.act(delta);
         batch.end();
@@ -73,17 +85,20 @@ public class OptionScreen extends ScreenAdapter {
         Table optionTable = new Table();
         muteBt = new ImageButton(new TextureRegionDrawable(new TextureRegion(mute)),
                 new TextureRegionDrawable(new TextureRegion(mute)), new TextureRegionDrawable(new TextureRegion(noMute)));
+        title = new ImageButton(new TextureRegionDrawable(new TextureRegion(titleTex)));
         screenMode.setItems("Fullscreen","Windowmode");
         screenMode.getStyle().listStyle.font.getData().scale(0.3f);
         musicVol.setValue(1);
 
         //Table zum Anzeigen der Elemente
-        optionTable.add(screenMode).padTop(Gdx.graphics.getHeight()/15);
+        optionTable.add(title).colspan(3).center();
         optionTable.row();
-        optionTable.add(volume).padTop(Gdx.graphics.getHeight()/15).padRight(Gdx.graphics.getHeight()/25);
-        optionTable.add(musicVol).padTop(Gdx.graphics.getHeight()/15).padRight(Gdx.graphics.getHeight()/25);
+        optionTable.add(screenMode).padTop(Gdx.graphics.getHeight()/25).colspan(3);
+        optionTable.row();
+        optionTable.add(volume).padTop(Gdx.graphics.getHeight()/25).padRight(Gdx.graphics.getHeight()/25);
+        optionTable.add(musicVol).padTop(Gdx.graphics.getHeight()/25).padRight(Gdx.graphics.getHeight()/25);
         optionTable.add(muteBt).width(muteBt.getWidth()*0.1f).height(muteBt.getHeight()*0.1f)
-                .padTop(Gdx.graphics.getHeight()/15).padRight(Gdx.graphics.getHeight()/25);
+                .padTop(Gdx.graphics.getHeight()/25).padRight(Gdx.graphics.getHeight()/25);
         optionTable.setFillParent(true);
 
         volume.setDisabled(true);
@@ -91,6 +106,7 @@ public class OptionScreen extends ScreenAdapter {
         screenMode.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                MenuScreen.clickEffect.play();
                 if(screenMode.getSelected().equals("Fullscreen")){
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
                     stage.getViewport().update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -116,6 +132,7 @@ public class OptionScreen extends ScreenAdapter {
 
         muteBt.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                MenuScreen.clickEffect.play();
                 isMute = !isMute;
                 if(isMute){
                     muteBt.setChecked(false);
