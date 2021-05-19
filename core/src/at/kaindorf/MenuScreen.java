@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -56,7 +57,7 @@ public class MenuScreen extends ScreenAdapter {
         option = new ImageButton(new TextureRegionDrawable(new TextureRegion(opt)));
         start.setPosition(800,900);
         start.setSize(405,108);
-        option.setPosition(800,700);
+        option .setPosition(800,700);
         option.setSize(405,108);
         beenden.setPosition(800,500);
         beenden.setSize(405,108);

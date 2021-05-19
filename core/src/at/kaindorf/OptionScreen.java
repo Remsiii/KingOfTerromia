@@ -31,8 +31,11 @@ public class OptionScreen extends ScreenAdapter {
     Skin skin;
     private Stage stage = new Stage();
     Dialog dialog;
+    private Texture backButton;
+    private ImageButton backButtonIB;
 
     public OptionScreen() {
+        backButton = new Texture("zurueck.png");
         skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
         batch = new SpriteBatch();
         screenMode = new SelectBox<String>(skin);
@@ -43,6 +46,7 @@ public class OptionScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+
         BitmapFont font = new BitmapFont();
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -53,6 +57,7 @@ public class OptionScreen extends ScreenAdapter {
         stage.draw();
         stage.act(delta);
         batch.end();
+
     }
 
     @Override
@@ -98,6 +103,20 @@ public class OptionScreen extends ScreenAdapter {
 
         stage.addActor(dialog);
         Gdx.input.setInputProcessor(stage);
+
+        /* Zurück Button zum Hauptmenü */
+        backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
+
+        backButtonIB.setPosition(40,0);
+        backButtonIB.setSize(405,108);
+        stage.addActor(backButtonIB);
+
+        backButtonIB.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
+            }
+        });
+
     }
 
     @Override

@@ -3,16 +3,21 @@ package at.kaindorf;
 import at.kaindorf.beans.*;
 import at.kaindorf.game.PlayGame;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.ArrayMap;
+import jdk.javadoc.internal.doclets.toolkit.util.Group;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +28,6 @@ import java.util.List;
  * @project: KingOfTerromia
  */
 public class GameScreen extends ScreenAdapter {
-
     SpriteBatch batch;
     private List<Texture> handCardsPlayer = new LinkedList<>();
     private List<Texture> playedCardsBot = new LinkedList<>();
@@ -40,10 +44,16 @@ public class GameScreen extends ScreenAdapter {
     private Texture iconFood;
     private Texture iconWood;
     private Texture iconStone;
+    private Texture backButton;
+    private ImageButton backButtonIB;
+    private Skin skin;
+
 
     public GameScreen() {
         batch = new SpriteBatch();
+
         nextRoundButton = new Texture("next_Round_button.png");
+        backButton = new Texture("zurueck.png");
         iconFood = new Texture("bread.png");
         iconWood = new Texture("wood.png");
         iconStone = new Texture("stone.png");
@@ -88,6 +98,44 @@ public class GameScreen extends ScreenAdapter {
         printHandCards();
         printBotCards();
         batch.end();
+
+        /* Zurück Button zum Hauptmenü */
+        backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
+
+        backButtonIB.setPosition(1598,0);
+        backButtonIB.setSize(345,78);
+        stage.addActor(backButtonIB);
+
+        backButtonIB.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
+            }
+        });
+
+        /* Pop-Up Fenster */
+        Gdx.input.setInputProcessor(stage = new Stage());
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+      /*  atlas = new TextureAtlas("assets/gui/buttons/alpha_generic_buttons.pack");
+
+        skin = new Skin();
+        skin.addRegions(atlas);*/
+        Dialog dialog = new Dialog("Warning", skin, "dialog") {
+            public void result(Object obj) {
+                System.out.println("result "+obj);
+                if(obj.equals(true))
+                {
+                    Gdx.app.exit();
+                    System.exit(0);
+                }
+            }
+        };
+        dialog.text("Are you sure you want to quit?");
+        dialog.button("Yes", true);
+        dialog.button("No", false);
+        dialog.key(Input.Keys.ENTER, true);
+        stage.addActor(dialog);
+        dialog.show(stage);
+
     }
 
     @Override
