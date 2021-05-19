@@ -14,7 +14,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -34,6 +36,7 @@ public class MenuScreen extends ScreenAdapter {
     ImageButton start,option,beenden,logoBt;
     public static Music music = Gdx.audio.newMusic(Gdx.files.internal("MainMenuOST.mp3"));
     Sound clickEffect;
+    private Skin skin;
 
     public MenuScreen() {
         music.play();
@@ -101,7 +104,32 @@ public class MenuScreen extends ScreenAdapter {
         beenden.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 clickEffect.play();
-                System.exit(0);
+                /** Pop-Up Fenster **/
+                Gdx.input.setInputProcessor(stage = new Stage());
+                skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+      /*  atlas = new TextureAtlas("assets/gui/buttons/alpha_generic_buttons.pack");
+
+        skin = new Skin();
+        skin.addRegions(atlas);*/
+                com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
+                    public void result(Object obj) {
+                        System.out.println("result "+obj);
+                        if(obj.equals(true))
+                        {
+                            Gdx.app.exit();
+                            System.exit(0);
+                        }else if(obj.equals(false))
+                        {
+                            KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
+                        }
+                    }
+                };
+                dialog.text("Are you sure you want to quit?");
+                dialog.button("Yes", true);
+                dialog.button("No", false);
+                dialog.key(Input.Keys.ENTER, true);
+                stage.addActor(dialog);
+                dialog.show(stage);
             }
         });
 

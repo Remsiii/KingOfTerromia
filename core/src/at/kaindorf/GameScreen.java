@@ -48,7 +48,7 @@ public class GameScreen extends ScreenAdapter {
     private Texture iconStone;
     private Texture backButton;
     private ImageButton backButtonIB;
-    private Skin skin;
+
 
     private Texture background;
 
@@ -69,7 +69,7 @@ public class GameScreen extends ScreenAdapter {
         round.add(new Texture("rounds/1.png"));
         setPlayCards(playGame.getPlayer().getHandCards(),1);
         setPlayCards(playGame.getBot().getAktCards(),2);
-        background = new Texture("Hintergrund.png");
+        background = new Texture("middleageWallpaper.jpg");
 
     }
 
@@ -118,29 +118,7 @@ public class GameScreen extends ScreenAdapter {
             }
         });
 
-        /* Pop-Up Fenster */
-        Gdx.input.setInputProcessor(stage = new Stage());
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-      /*  atlas = new TextureAtlas("assets/gui/buttons/alpha_generic_buttons.pack");
 
-        skin = new Skin();
-        skin.addRegions(atlas);*/
-        Dialog dialog = new Dialog("Warning", skin, "dialog") {
-            public void result(Object obj) {
-                System.out.println("result "+obj);
-                if(obj.equals(true))
-                {
-                    Gdx.app.exit();
-                    System.exit(0);
-                }
-            }
-        };
-        dialog.text("Are you sure you want to quit?");
-        dialog.button("Yes", true);
-        dialog.button("No", false);
-        dialog.key(Input.Keys.ENTER, true);
-        stage.addActor(dialog);
-        dialog.show(stage);
 
     }
 
