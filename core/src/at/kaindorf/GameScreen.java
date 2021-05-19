@@ -27,6 +27,9 @@ public class GameScreen extends ScreenAdapter {
     SpriteBatch batch;
     private List<Texture> handCardsPlayer = new LinkedList<>();
     private List<Texture> playedCardsBot = new LinkedList<>();
+    private List<Texture> playedCardsPlayerRes = new LinkedList<>();
+    private List<Texture> playedCardsPlayerDef = new LinkedList<>();
+    private List<Texture> playedCardsPlayerAttack = new LinkedList<>();
     private List<Texture> hpBot = new LinkedList<>();
     private List<Texture> hpPlayer = new LinkedList<>();
     private Texture nextRoundButton;
@@ -92,6 +95,9 @@ public class GameScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
         printHandCards(delta);
         printBotCards();
+        printPlayerCardsAttack();
+        printPlayerCardsDef();
+        printPlayerCardsRes();
         batch.end();
     }
 
@@ -120,12 +126,16 @@ public class GameScreen extends ScreenAdapter {
                                 handCardsPlayer.add(new Texture("cards/attack/archers.jpg"));
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/attack/archers.jpg"));
+                            else if(type==3)
+                                playedCardsPlayerAttack.add(new Texture("cards/attack/archers.jpg"));
                         break;
                     case PIKEMEN:
                             if(type==1)
                                 handCardsPlayer.add(new Texture("cards/attack/pikemen.jpg"));
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/attack/pikemen.jpg"));
+                            else if(type==3)
+                                playedCardsPlayerAttack.add(new Texture("cards/attack/pikemen.jpg"));
                 }
             }
             else if(card instanceof DefenseCard)
@@ -137,12 +147,16 @@ public class GameScreen extends ScreenAdapter {
                                 handCardsPlayer.add(new Texture("cards/defense/tower.jpg"));
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/defense/tower.jpg"));
+                            else if(type==3)
+                                playedCardsPlayerDef.add(new Texture("cards/defense/tower.jpg"));
                         break;
                     case WALL:
                             if(type==1)
                                 handCardsPlayer.add(new Texture("cards/defense/wall.jpg"));
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/defense/wall.jpg"));
+                            else if(type==3)
+                                playedCardsPlayerDef.add(new Texture("cards/defense/wall.jpg"));
                 }
             }
             else
@@ -154,18 +168,24 @@ public class GameScreen extends ScreenAdapter {
                                 handCardsPlayer.add(new Texture("cards/ressource/hunterhut.jpg"));
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/ressource/hunterhut.jpg"));
+                            else if(type==3)
+                                playedCardsPlayerRes.add(new Texture("cards/ressource/hunterhut.jpg"));
                         break;
                     case LUMBERJACKHUT:
                             if(type==1)
                                 handCardsPlayer.add(new Texture("cards/ressource/lumberjackhut.jpg"));
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/ressource/lumberjackhut.jpg"));
+                            else if(type==3)
+                                playedCardsPlayerRes.add(new Texture("cards/ressource/lumberjackhut.jpg"));
                         break;
                     case STONEMINE:
                             if(type==1)
                                 handCardsPlayer.add(new Texture("cards/ressource/stonemine.jpg"));
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/ressource/stonemine.jpg"));
+                            else if(type==3)
+                                playedCardsPlayerRes.add(new Texture("cards/ressource/stonemine.jpg"));
                 }
             }
 
@@ -175,14 +195,16 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Handkarten anzeigen
      */
-    public void printHandCards(float delta)
+    public void printHandCards(final float delta)
     {
 
         int testZahl = - 720;
         int index = 0;
+
         stage.draw();
         stage.act(delta);
 
+        handCardsPlayerIB.clear();
         for (Texture hcards : handCardsPlayer) {
             testZahl = testZahl + 240;
             if(hcards==null)
@@ -191,9 +213,10 @@ public class GameScreen extends ScreenAdapter {
             handCardsPlayerIB.get(index).setSize(240.0f, 300.0f);
             handCardsPlayerIB.get(index).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, 0);
             final int fIndex = index;
+            final float fdelta = delta;
             handCardsPlayerIB.get(index).addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y){
-                    clickedCard(fIndex);
+                    clickedCard(fIndex, fdelta);
                 }
             });
 
@@ -204,7 +227,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     /**
-     * Handkarten anzeigen
+     * gespielte Bot Karten anzeigen
      */
     public void printBotCards()
     {
@@ -212,6 +235,42 @@ public class GameScreen extends ScreenAdapter {
         for (Texture hcards : playedCardsBot) {
             testZahl = testZahl + 240;
             batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-350.0f, 240.0f, 300.0f);
+        }
+    }
+
+    /**
+     * gespielte Attack Karten anzeigen
+     */
+    public void printPlayerCardsAttack()
+    {
+        int testZahl = - 720;
+        for (Texture hcards : playedCardsPlayerAttack) {
+            testZahl = testZahl + 240;
+            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-500.0f, 240.0f, 300.0f);
+        }
+    }
+
+    /**
+     * gespielte Def Karten anzeigen
+     */
+    public void printPlayerCardsDef()
+    {
+        int testZahl = - 720;
+        for (Texture hcards : playedCardsPlayerDef) {
+            testZahl = testZahl + 240;
+            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-700.0f, 240.0f, 300.0f);
+        }
+    }
+
+    /**
+     * gespielte Res Karten anzeigen
+     */
+    public void printPlayerCardsRes()
+    {
+        int testZahl = - 720;
+        for (Texture hcards : playedCardsPlayerRes) {
+            testZahl = testZahl + 240;
+            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-900.0f, 240.0f, 300.0f);
         }
     }
 
@@ -242,14 +301,27 @@ public class GameScreen extends ScreenAdapter {
         for (Texture hcards : playedCardsBot) {
             hcards.dispose();
         }
+        for (Texture hcards : playedCardsPlayerDef) {
+            hcards.dispose();
+        }
+        for (Texture hcards : playedCardsPlayerAttack) {
+            hcards.dispose();
+        }
+        for (Texture hcards : playedCardsPlayerRes) {
+            hcards.dispose();
+        }
 
         handCardsPlayer.clear();
         playedCardsBot.clear();
+        playedCardsPlayerDef.clear();
+        playedCardsPlayerAttack.clear();
+        playedCardsPlayerRes.clear();
 
         playGame.startNextRound();
 
         setPlayCards(playGame.getPlayer().getHandCards(), 1);
         setPlayCards(playGame.getBot().getAktCards(), 2);
+        setPlayCards(playGame.getPlayer().getPlayerCardsRes(), 3);
         batch.end();
     }
 
@@ -356,21 +428,54 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    //Wenn Karte geklickt wurde
-    public void clickedCard(int index)
+    /**
+     * Wenn Karte geklickt wurde
+     * @param index
+     * @param delta
+     */
+    public void clickedCard(int index, float delta)
     {
-        //Index muss angepasst werden wenn Karte gespielt da sie ja gelöscht wird
+        batch.begin();
         Card card = playGame.getPlayer().getHandCards().get(index);
         List<Card> aktHandCards = playGame.getPlayer().getHandCards();
         aktHandCards.remove(index);
         playGame.getPlayer().setHandCards(aktHandCards);
-        List<Card> aktPlayerCards = playGame.getPlayer().getPlayerCards();
-        aktPlayerCards.add(card);
-        playGame.getPlayer().setPlayerCards(aktPlayerCards);
 
-        //ToDo: Karte löschen (print HandCards) und oben rausschreiben dafür
-        //ToDo: Das man sie nur schreiben kann wenn man genug Resourcen hat und Resourcen Upgraden
+        if(card instanceof RessourceCard)
+        {
+            List<Card> aktPlayerCardsRes = playGame.getPlayer().getPlayerCardsRes();
+            aktPlayerCardsRes.add(card);
+            playGame.getPlayer().setPlayerCardsRes(aktPlayerCardsRes);
+            playedCardsPlayerRes.clear();
+            setPlayCards(aktPlayerCardsRes,3);
+            printPlayerCardsRes();
+        }
+        else if(card instanceof AttackCard)
+        {
+            List<Card> aktPlayerCardsAttack = playGame.getPlayer().getPlayerCardsAttack();
+            aktPlayerCardsAttack.add(card);
+            playGame.getPlayer().setPlayerCardsAttack(aktPlayerCardsAttack);
+            playedCardsPlayerAttack.clear();
+            setPlayCards(aktPlayerCardsAttack,3);
+            printPlayerCardsAttack();
+        }
+        else{
+            List<Card> aktPlayerCardDef = playGame.getPlayer().getPlayerCardsDef();
+            aktPlayerCardDef.add(card);
+            playGame.getPlayer().setPlayerCardsDef(aktPlayerCardDef);
+            playedCardsPlayerDef.clear();
+            setPlayCards(aktPlayerCardDef,3);
+            printPlayerCardsDef();
+        }
 
-        handCardsPlayer.remove(index);
+        handCardsPlayer.clear();
+        setPlayCards(playGame.getPlayer().getHandCards(), 1);
+        printHandCards(delta);
+        batch.end();
+
+        //ToDo: Das man sie nur schreiben kann wenn man genug Resourcen hat
+        //ToDo: Das gespielte Karten nicht mehr angezeigt werden
+
+
     }
 }

@@ -23,7 +23,7 @@ public class PlayGame {
     private GameBeans game;
 
     public PlayGame() {
-        player = new Player(200, new LinkedList<Card>() , new LinkedList<Card>(), 15, 0, 5);
+        player = new Player(200, new LinkedList<Card>() , new LinkedList<Card>(), new LinkedList<Card>(), new LinkedList<Card>(), 15, 0, 5);
         bot = new Bot(200, new LinkedList<Card>());
         game = new GameBeans(player,bot,0);
         startNextRound();
@@ -34,6 +34,65 @@ public class PlayGame {
      */
     public void startNextRound()
     {
+        List<Card> aktBotPlayedCards = bot.getAktCards();
+
+        int anzDefPlayer = 0;
+        int anzDefBot = 0;
+        int anzAttackPlayer = 0;
+        int anzAttackBot = 0;
+
+        for (Card card:player.getPlayerCardsAttack()) {
+            switch (((AttackCard) card).getAttackCardType())
+            {
+                case PIKEMEN:
+                    anzAttackPlayer+=12;
+                    break;
+                case ARCHERS:
+                    anzAttackPlayer+=15;
+            }
+        }
+        for (Card card:bot.getAktCards()) {
+            if(card instanceof AttackCard)
+            {
+                switch (((AttackCard) card).getAttackCardType())
+                {
+                    case PIKEMEN:
+                        anzAttackBot+=12;
+                        break;
+                    case ARCHERS:
+                        anzAttackBot+=15;
+                }
+            }
+
+        }
+
+        for (Card card:player.getPlayerCardsDef()) {
+            switch (((DefenseCard) card).getDefenseCardType())
+            {
+                case TOWER:
+                    anzDefPlayer+=8;
+                    break;
+                case WALL:
+                    anzDefPlayer+=6;
+            }
+        }
+        for (Card card:bot.getAktCards()) {
+            if(card instanceof DefenseCard) {
+                switch (((DefenseCard) card).getDefenseCardType()) {
+                    case TOWER:
+                        anzDefBot += 8;
+                        break;
+                    case WALL:
+                        anzDefBot += 6;
+                }
+            }
+        }
+        if(anzAttackBot>anzDefPlayer)
+            player.setHp(player.getHp()-(anzAttackBot-anzDefPlayer));
+
+        if(anzAttackPlayer>anzDefBot)
+            bot.setHp(bot.getHp()-(anzAttackPlayer-anzDefBot));
+
         game.setAktRound(game.getAktRound()+1);
 
         List<Card> handCards = new LinkedList<>();
@@ -156,23 +215,22 @@ public class PlayGame {
             }
         }
 
-        for (Card card:player.getPlayerCards()) {
-            if(card instanceof RessourceCard)
+        for (Card card:player.getPlayerCardsRes()) {
+            switch (((RessourceCard) card).getRessourceCardType())
             {
-                switch (((RessourceCard) card).getRessourceCardType())
-                {
-                    case HUNTERHUT:
-                            player.setAktFood(player.getAktFood()+7);
-                        break;
-                    case LUMBERJACKHUT:
-                            player.setAktWood(player.getAktWood()+10);
-                        break;
-                    case STONEMINE:
-                            player.setAktStone(player.getAktStone()+5);
-                }
+                 case HUNTERHUT:
+                         player.setAktFood(player.getAktFood()+7);
+                     break;
+                 case LUMBERJACKHUT:
+                         player.setAktWood(player.getAktWood()+10);
+                     break;
+                 case STONEMINE:
+                         player.setAktStone(player.getAktStone()+5);
             }
         }
 
+        player.setPlayerCardsDef(new LinkedList<Card>());
+        player.setPlayerCardsAttack(new LinkedList<Card>());
         bot.setAktCards(botPlayedCards);
         player.setHandCards(handCards);
     }
