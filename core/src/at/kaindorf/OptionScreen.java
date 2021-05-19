@@ -2,9 +2,13 @@ package at.kaindorf;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,13 +16,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 /**
  * @author: Meister Michael
  * @date: 14.04.2021
@@ -27,10 +30,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class OptionScreen extends ScreenAdapter {
     SpriteBatch batch;
     SelectBox<String> screenMode;
-    SelectBox<String> resolution;
     Skin skin;
-    private Stage stage = new Stage();
+    private Stage stage = new Stage(new ScreenViewport());
     Dialog dialog;
+    Slider musicVol;
+    BitmapFont font = new BitmapFont();
+    TextField volume;
+    Texture mute,noMute;
+    ImageButton muteBt;
+    boolean isMute = true;
+    public static boolean startW = false;
     private Texture backButton;
     private ImageButton backButtonIB;
 
@@ -39,69 +48,88 @@ public class OptionScreen extends ScreenAdapter {
         skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
         batch = new SpriteBatch();
         screenMode = new SelectBox<String>(skin);
-        resolution = new SelectBox<String>(skin);
         dialog = new Dialog("Setting",skin);
-
+        musicVol = new Slider(0,1,0.01f,false,skin);
+        volume = new TextField("",skin);
+        mute = new Texture("mute.png");
+        noMute = new Texture("noMute.png");
     }
 
     @Override
     public void render(float delta) {
-
         BitmapFont font = new BitmapFont();
-
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        font.setColor(Color.RED);
+        font.setColor(Color.BLACK);
         SpriteBatch batch = new SpriteBatch();
         batch.begin();
         stage.draw();
         stage.act(delta);
         batch.end();
-
     }
 
     @Override
     public void show() {
-        dialog.setSize(Gdx.graphics.getWidth()/2+100,Gdx.graphics.getHeight()/2+100);
-        dialog.setPosition(Gdx.graphics.getWidth()/2 - dialog.getWidth()/2,Gdx.graphics.getHeight()/2 - dialog.getHeight()/2);
-        screenMode.setItems("Vollbild","Fenstermodus");
-        resolution.setItems(Gdx.graphics.getWidth()+"x"+Gdx.graphics.getHeight(),
-                String.format("%.0fx%.0f",Gdx.graphics.getWidth()*0.8333333333333333,Gdx.graphics.getHeight()*0.8333333333333333),
-                String.format("%.0fx%.0f",(Gdx.graphics.getWidth()*0.8333333333333333)*0.8,(Gdx.graphics.getHeight()*0.8333333333333333)*0.8));
+        Table optionTable = new Table();
+        muteBt = new ImageButton(new TextureRegionDrawable(new TextureRegion(mute)),
+                new TextureRegionDrawable(new TextureRegion(mute)), new TextureRegionDrawable(new TextureRegion(noMute)));
+        screenMode.setItems("Fullscreen","Windowmode");
+        screenMode.getStyle().listStyle.font.getData().scale(0.3f);
+        musicVol.setValue(1);
 
-        dialog.getContentTable().defaults().pad(10);
-        dialog.getContentTable().add(screenMode);
-        dialog.getContentTable().add(resolution);
+        //Table zum Anzeigen der Elemente
+        optionTable.add(screenMode).padTop(Gdx.graphics.getHeight()/15);
+        optionTable.row();
+        optionTable.add(volume).padTop(Gdx.graphics.getHeight()/15).padRight(Gdx.graphics.getHeight()/25);
+        optionTable.add(musicVol).padTop(Gdx.graphics.getHeight()/15).padRight(Gdx.graphics.getHeight()/25);
+        optionTable.add(muteBt).width(muteBt.getWidth()*0.1f).height(muteBt.getHeight()*0.1f)
+                .padTop(Gdx.graphics.getHeight()/15).padRight(Gdx.graphics.getHeight()/25);
+        optionTable.setFillParent(true);
 
+        volume.setDisabled(true);
+        volume.setText(String.format("%.0f%%",musicVol.getValue()*100));
         screenMode.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(screenMode.getSelected().equals("Vollbild")){
+                if(screenMode.getSelected().equals("Fullscreen")){
                     Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                    stage.getViewport().update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
                 }else{
                     Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+                    stage.getViewport().update(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
                 }
             }
         });
 
-        resolution.addListener(new ChangeListener() {
+        musicVol.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                String[] res = resolution.getSelected().split("x");
-                System.out.println(String.format("%s %s",res[0],res[1]));
-                if(screenMode.getSelected().equals("Fenstermodus")){
-                    Gdx.graphics.setWindowedMode(Integer.parseInt(res[0]),Integer.parseInt(res[1]));
-                    stage.getViewport().update(Integer.parseInt(res[0]),Integer.parseInt(res[1]), true);
-                }else{
+                if(musicVol.isDragging()) {
+                    if(!muteBt.isChecked()){
+                        MenuScreen.music.setVolume(musicVol.getValue());
+                    }
+                    volume.setText(String.format("%.0f%%",musicVol.getValue()*100));
+                }
 
-                    stage.getViewport().update(Integer.parseInt(res[0]),Integer.parseInt(res[1]), true);
+            }
+        });
+
+        muteBt.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y){
+                isMute = !isMute;
+                if(isMute){
+                    muteBt.setChecked(false);
+                    MenuScreen.music.setVolume(musicVol.getValue());
+                }else{
+                    muteBt.setChecked(true);
+                    MenuScreen.music.setVolume(0);
+
                 }
             }
         });
 
 
-
-        stage.addActor(dialog);
+        stage.addActor(optionTable);
         Gdx.input.setInputProcessor(stage);
 
         /* Zurück Button zum Hauptmenü */
@@ -120,12 +148,27 @@ public class OptionScreen extends ScreenAdapter {
     }
 
     @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height);
+    }
+
+    @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
     }
 
     @Override
     public void hide() {
         this.dispose();
     }
+
+    /**
+     * Methode zum speichern der eingestellten Optionen.
+     */
+    public void safeOptions(){
+
+    }
+
 }
+
