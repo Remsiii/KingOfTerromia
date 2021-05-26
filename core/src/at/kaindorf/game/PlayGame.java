@@ -176,12 +176,12 @@ public class PlayGame {
         {
             botPlayedCards.add(randomDefCard());
         }
-        else if(game.getAktRound() >= 4 && game.getAktRound() < 10)
+        else if(game.getAktRound() >= 4 && game.getAktRound() < 7)
         {
             botPlayedCards.add(randomDefCard());
             botPlayedCards.add(randomAttackCard());
         }
-        else if(game.getAktRound() >= 10 && game.getAktRound() < 20)
+        else if(game.getAktRound() >= 7 && game.getAktRound() < 17)
         {
             botPlayedCards.add(randomDefCard());
             botPlayedCards.add(randomAttackCard());

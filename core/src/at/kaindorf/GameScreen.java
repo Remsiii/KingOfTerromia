@@ -464,45 +464,54 @@ public class GameScreen extends ScreenAdapter {
     {
         batch.begin();
         Card card = playGame.getPlayer().getHandCards().get(index);
-        List<Card> aktHandCards = playGame.getPlayer().getHandCards();
-        aktHandCards.remove(index);
-        playGame.getPlayer().setHandCards(aktHandCards);
 
-        if(card instanceof RessourceCard)
+        if(card.getCostFood() > playGame.getPlayer().getAktFood() || card.getCostStone() > playGame.getPlayer().getAktStone() || card.getCostWood() > playGame.getPlayer().getAktWood())
         {
-            List<Card> aktPlayerCardsRes = playGame.getPlayer().getPlayerCardsRes();
-            aktPlayerCardsRes.add(card);
-            playGame.getPlayer().setPlayerCardsRes(aktPlayerCardsRes);
-            playedCardsPlayerRes.clear();
-            setPlayCards(aktPlayerCardsRes,3);
-            printPlayerCardsRes();
+            //Zu wenig ressourcen um Karte Card zu bauen!!!!
         }
-        else if(card instanceof AttackCard)
+        else
         {
-            List<Card> aktPlayerCardsAttack = playGame.getPlayer().getPlayerCardsAttack();
-            aktPlayerCardsAttack.add(card);
-            playGame.getPlayer().setPlayerCardsAttack(aktPlayerCardsAttack);
-            playedCardsPlayerAttack.clear();
-            setPlayCards(aktPlayerCardsAttack,3);
-            printPlayerCardsAttack();
-        }
-        else{
-            List<Card> aktPlayerCardDef = playGame.getPlayer().getPlayerCardsDef();
-            aktPlayerCardDef.add(card);
-            playGame.getPlayer().setPlayerCardsDef(aktPlayerCardDef);
-            playedCardsPlayerDef.clear();
-            setPlayCards(aktPlayerCardDef,3);
-            printPlayerCardsDef();
-        }
+            List<Card> aktHandCards = playGame.getPlayer().getHandCards();
+            aktHandCards.remove(index);
+            playGame.getPlayer().setHandCards(aktHandCards);
 
-        handCardsPlayer.clear();
-        setPlayCards(playGame.getPlayer().getHandCards(), 1);
-        printHandCards(delta);
+            playGame.getPlayer().setAktWood(playGame.getPlayer().getAktWood()-card.getCostWood());
+            playGame.getPlayer().setAktFood(playGame.getPlayer().getAktFood()-card.getCostFood());
+            playGame.getPlayer().setAktStone(playGame.getPlayer().getAktStone()-card.getCostStone());
+            updateResourcenAnzeige();
+            if(card instanceof RessourceCard)
+            {
+                List<Card> aktPlayerCardsRes = playGame.getPlayer().getPlayerCardsRes();
+                aktPlayerCardsRes.add(card);
+                playGame.getPlayer().setPlayerCardsRes(aktPlayerCardsRes);
+                playedCardsPlayerRes.clear();
+                setPlayCards(aktPlayerCardsRes,3);
+                printPlayerCardsRes();
+            }
+            else if(card instanceof AttackCard)
+            {
+                List<Card> aktPlayerCardsAttack = playGame.getPlayer().getPlayerCardsAttack();
+                aktPlayerCardsAttack.add(card);
+                playGame.getPlayer().setPlayerCardsAttack(aktPlayerCardsAttack);
+                playedCardsPlayerAttack.clear();
+                setPlayCards(aktPlayerCardsAttack,3);
+                printPlayerCardsAttack();
+            }
+            else{
+                List<Card> aktPlayerCardDef = playGame.getPlayer().getPlayerCardsDef();
+                aktPlayerCardDef.add(card);
+                playGame.getPlayer().setPlayerCardsDef(aktPlayerCardDef);
+                playedCardsPlayerDef.clear();
+                setPlayCards(aktPlayerCardDef,3);
+                printPlayerCardsDef();
+            }
+
+            handCardsPlayer.clear();
+            setPlayCards(playGame.getPlayer().getHandCards(), 1);
+            printHandCards(delta);
+        }
         batch.end();
 
-        //ToDo: Das man sie nur schreiben kann wenn man genug Resourcen hat
         //ToDo: Das gespielte Karten nicht mehr angezeigt werden
-
-
     }
 }
