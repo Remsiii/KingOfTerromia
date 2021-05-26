@@ -51,6 +51,7 @@ public class GameScreen extends ScreenAdapter {
     private Texture iconStone;
     private Texture backButton;
     private ImageButton backButtonIB;
+    private Skin skin;
 
 
     private Texture background;
@@ -120,7 +121,28 @@ public class GameScreen extends ScreenAdapter {
 
         backButtonIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
-                KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
+                /** Pop-Up Fenster **/
+                Gdx.input.setInputProcessor(stage = new Stage());
+                skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+                com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
+                    public void result(Object obj) {
+                        System.out.println("result "+obj);
+                        if(obj.equals(true))
+                        {
+                            KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
+                        }else if(obj.equals(false))
+                        {
+                            // nothing should happen
+                        }
+                    }
+                };
+                dialog.text("Are you sure you want to quit?");
+                dialog.button("Yes", true);
+                dialog.button("No", false);
+                dialog.key(Input.Keys.ENTER, true);
+                stage.addActor(dialog);
+                dialog.show(stage);
+
             }
         });
 
@@ -468,6 +490,19 @@ public class GameScreen extends ScreenAdapter {
         if(card.getCostFood() > playGame.getPlayer().getAktFood() || card.getCostStone() > playGame.getPlayer().getAktStone() || card.getCostWood() > playGame.getPlayer().getAktWood())
         {
             //Zu wenig ressourcen um Karte Card zu bauen!!!!
+            /** Pop-Up Fenster **/
+            Gdx.input.setInputProcessor(stage = new Stage());
+            skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+            com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
+                public void result(Object obj) {
+                    System.out.println("result "+obj);
+                }
+            };
+            dialog.text("You have too little resources to build that card");
+            dialog.button("I Understand", true);
+            dialog.key(Input.Keys.ENTER, true);
+            stage.addActor(dialog);
+            dialog.show(stage);
         }
         else
         {
