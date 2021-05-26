@@ -249,10 +249,8 @@ public class GameScreen extends ScreenAdapter {
 
         int testZahl = - 720;
         int index = 0;
-
         stage.draw();
         stage.act(delta);
-
         handCardsPlayerIB.clear();
         for (Texture hcards : handCardsPlayer) {
             testZahl = testZahl + 240;
@@ -328,7 +326,6 @@ public class GameScreen extends ScreenAdapter {
      */
     public void nextRound()
     {
-
         stage = new Stage();
         int aktRound = playGame.getGame().getAktRound();
         aktRound++;
@@ -489,7 +486,6 @@ public class GameScreen extends ScreenAdapter {
 
         if(card.getCostFood() > playGame.getPlayer().getAktFood() || card.getCostStone() > playGame.getPlayer().getAktStone() || card.getCostWood() > playGame.getPlayer().getAktWood())
         {
-            //Zu wenig ressourcen um Karte Card zu bauen!!!!
             /** Pop-Up Fenster **/
             Gdx.input.setInputProcessor(stage = new Stage());
             skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -509,11 +505,9 @@ public class GameScreen extends ScreenAdapter {
             List<Card> aktHandCards = playGame.getPlayer().getHandCards();
             aktHandCards.remove(index);
             playGame.getPlayer().setHandCards(aktHandCards);
-
             playGame.getPlayer().setAktWood(playGame.getPlayer().getAktWood()-card.getCostWood());
             playGame.getPlayer().setAktFood(playGame.getPlayer().getAktFood()-card.getCostFood());
             playGame.getPlayer().setAktStone(playGame.getPlayer().getAktStone()-card.getCostStone());
-            updateResourcenAnzeige();
             if(card instanceof RessourceCard)
             {
                 List<Card> aktPlayerCardsRes = playGame.getPlayer().getPlayerCardsRes();
@@ -543,10 +537,9 @@ public class GameScreen extends ScreenAdapter {
 
             handCardsPlayer.clear();
             setPlayCards(playGame.getPlayer().getHandCards(), 1);
-            printHandCards(delta);
         }
         batch.end();
-
-        //ToDo: Das gespielte Karten nicht mehr angezeigt werden
+        stage.clear();
+        render(delta);
     }
 }
