@@ -500,6 +500,10 @@ public class GameScreen extends ScreenAdapter {
             stage.addActor(dialog);
             dialog.show(stage);
         }
+        else if(playGame.getPlayer().getPlayerCardsRes().size()==10 && card instanceof RessourceCard)
+        {
+            //Dialog maximale Resourcen Karten erreicht!!
+        }
         else
         {
             List<Card> aktHandCards = playGame.getPlayer().getHandCards();

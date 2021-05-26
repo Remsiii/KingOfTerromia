@@ -140,13 +140,21 @@ public class PlayGame {
         }
         else if(game.getAktRound() >= 10 && game.getAktRound() < 20)
         {
-            handCards.add(randomResCard());
+            int zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: handCards.add(randomDefCard());
+                    break;
+                case 2: handCards.add(randomAttackCard());
+                    break;
+                default: handCards.add(0,randomResCard());
+            }
             handCards.add(randomDefCard());
             handCards.add(randomAttackCard());
 
             //Zufall ob Attack oder Defense Karte
             for (int i = 0; i < 2; i++) {
-                int zz = rand.nextInt(2)+1;
+                zz = rand.nextInt(2)+1;
                 if(zz==1)
                 {
                     handCards.add(randomDefCard());
@@ -162,7 +170,7 @@ public class PlayGame {
             handCards.add(randomDefCard());
             handCards.add(randomAttackCard());
             //Zufall ob Attack oder Defense Karte
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 int zz = rand.nextInt(2)+1;
                 if(zz==1)
                 {
@@ -173,15 +181,7 @@ public class PlayGame {
                     handCards.add(randomAttackCard());
                 }
             }
-            int zz = rand.nextInt(3)+1;
-            switch (zz)
-            {
-                case 1: handCards.add(randomDefCard());
-                    break;
-                case 2: handCards.add(randomAttackCard());
-                    break;
-                default: handCards.add(0,randomResCard());
-            }
+
         }
 
         //Karten die der Bot spielt
