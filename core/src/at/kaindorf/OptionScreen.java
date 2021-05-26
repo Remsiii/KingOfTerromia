@@ -180,12 +180,5 @@ public class OptionScreen extends ScreenAdapter {
         this.dispose();
     }
 
-    /**
-     * Methode zum speichern der eingestellten Optionen.
-     */
-    public void safeOptions(){
-
-    }
-
 }
 

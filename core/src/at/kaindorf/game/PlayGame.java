@@ -1,5 +1,8 @@
 package at.kaindorf.game;
 
+import at.kaindorf.EndScreen;
+import at.kaindorf.GameScreen;
+import at.kaindorf.KingOfTerromia;
 import at.kaindorf.beans.*;
 import at.kaindorf.enums.AttackCardTypes;
 import at.kaindorf.enums.DefenseCardTypes;
@@ -21,6 +24,7 @@ public class PlayGame {
     private Player player;
     private Bot bot;
     private GameBeans game;
+    private boolean won;
 
     public PlayGame() {
         player = new Player(200, new LinkedList<Card>() , new LinkedList<Card>(), new LinkedList<Card>(), new LinkedList<Card>(), 15, 0, 5);
@@ -87,11 +91,25 @@ public class PlayGame {
                 }
             }
         }
-        if(anzAttackBot>anzDefPlayer)
-            player.setHp(player.getHp()-(anzAttackBot-anzDefPlayer));
+        if(anzAttackBot>anzDefPlayer) {
+            if((player.getHp() - (anzAttackBot - anzDefPlayer)) <= 0){
+                player.setHp(0);
+                won = false;
+                KingOfTerromia.INSTANCE.setScreen(new EndScreen(won));
+            } else{
+                player.setHp(player.getHp() - (anzAttackBot - anzDefPlayer));
+            }
+        }
 
-        if(anzAttackPlayer>anzDefBot)
-            bot.setHp(bot.getHp()-(anzAttackPlayer-anzDefBot));
+        if(anzAttackPlayer>anzDefBot) {
+            if((bot.getHp() - (anzAttackPlayer - anzDefBot)) <= 0){
+                bot.setHp(0);
+                won = true;
+                KingOfTerromia.INSTANCE.setScreen(new EndScreen(won));
+            } else{
+                bot.setHp(bot.getHp() - (anzAttackPlayer - anzDefBot));
+            }
+        }
 
         game.setAktRound(game.getAktRound()+1);
 
@@ -319,5 +337,9 @@ public class PlayGame {
 
     public void setGame(GameBeans game) {
         this.game = game;
+    }
+
+    public boolean isWon() {
+        return won;
     }
 }
