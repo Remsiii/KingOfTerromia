@@ -121,55 +121,42 @@ public class PlayGame {
         }
         else if(game.getAktRound() < 10)
         {
+            int count = 0; //Wie viel Zufallskarten
             if(game.getPlayer().getPlayerCardsRes().size()==10)
             {
-                for (int i = 0; i < 2; i++) {
-                    int zz = rand.nextInt(2)+1;
-
-                    if(zz==1)
-                    {
-                        handCards.add(randomDefCard());
-                    }
-                    else
-                    {
-                        handCards.add(randomAttackCard());
-                    }
-                }
+                count = 2;
             }
             else if(game.getPlayer().getPlayerCardsRes().size()==9)
             {
                 handCards.add(randomResCard());
-                //Zufall ob Attack OR Def
+                count = 1;
+            }
+            else
+            {
+                handCards.add(randomResCard());
+                handCards.add(randomResCard());
+            }
+
+            handCards.add(randomAttackCard());
+
+            count++;
+            int anzDefCard = 1;
+            for (int i = 0; i < count; i++) {
                 int zz = rand.nextInt(2)+1;
 
                 if(zz==1)
                 {
-                    handCards.add(randomDefCard());
+                    anzDefCard++;
                 }
                 else
                 {
                     handCards.add(randomAttackCard());
                 }
             }
-            else
-            {
-                handCards.add(randomResCard());
-                handCards.add(randomResCard());
-            }
-            handCards.add(randomDefCard());
-            handCards.add(randomAttackCard());
-
-            //Zufall ob es am Anfang zwei AttackKarten oder zwei DefKarten geben soll
-            int zz = rand.nextInt(2)+1;
-
-            if(zz==1)
-            {
+            for (int i = 0; i < anzDefCard; i++) {
                 handCards.add(randomDefCard());
             }
-            else
-            {
-                handCards.add(randomAttackCard());
-            }
+
         }
         else if(game.getAktRound() >= 10 && game.getAktRound() < 20)
         {
@@ -183,37 +170,44 @@ public class PlayGame {
                 handCards.add(randomResCard());
             }
 
-            handCards.add(randomDefCard());
+
             handCards.add(randomAttackCard());
 
+            int anzDefCards=1;
             //Zufall ob Attack oder Defense Karte
             for (int i = 0; i < count; i++) {
                 int zz = rand.nextInt(2)+1;
                 if(zz==1)
                 {
-                    handCards.add(randomDefCard());
+                    anzDefCards++;
                 }
                 else
                 {
                     handCards.add(randomAttackCard());
                 }
             }
+            for (int i = 0; i < anzDefCards; i++) {
+                handCards.add(randomDefCard());
+            }
         }
         else
         {
-            handCards.add(randomDefCard());
+            int anzDefCards = 1;
             handCards.add(randomAttackCard());
             //Zufall ob Attack oder Defense Karte
             for (int i = 0; i < 3; i++) {
                 int zz = rand.nextInt(2)+1;
                 if(zz==1)
                 {
-                    handCards.add(randomDefCard());
+                    anzDefCards++;
                 }
                 else
                 {
                     handCards.add(randomAttackCard());
                 }
+            }
+            for (int i = 0; i < anzDefCards; i++) {
+                handCards.add(randomDefCard());
             }
 
         }
@@ -230,40 +224,39 @@ public class PlayGame {
         }
         else if(game.getAktRound() >= 4 && game.getAktRound() < 7)
         {
-            botPlayedCards.add(randomDefCard());
             botPlayedCards.add(randomAttackCard());
+            botPlayedCards.add(randomDefCard());
         }
         else if(game.getAktRound() >= 7 && game.getAktRound() < 17)
         {
-            botPlayedCards.add(randomDefCard());
+
             botPlayedCards.add(randomAttackCard());
+            int anzDefCard=1;
             int zz = rand.nextInt(3)+1;
             switch (zz)
             {
-                case 1: botPlayedCards.add(randomDefCard());
+                case 1: anzDefCard++;
                     break;
                 case 2: botPlayedCards.add(randomAttackCard());
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
             }
         }
         else
         {
-            botPlayedCards.add(randomDefCard());
             botPlayedCards.add(randomAttackCard());
+            int anzDefCard = 1;
             int zz = rand.nextInt(2)+1;
-            if(zz==1)
-            {
+            for (int i = 0; i < 2; i++) {
+                if (zz == 1) {
+                    anzDefCard++;
+                } else {
+                    botPlayedCards.add(randomAttackCard());
+                }
+            }
+            for (int i = 0; i < anzDefCard; i++) {
                 botPlayedCards.add(randomDefCard());
-            }
-            else
-            {
-                botPlayedCards.add(randomAttackCard());
-            }
-            zz = rand.nextInt(3)+1;
-            switch (zz)
-            {
-                case 1: botPlayedCards.add(randomDefCard());
-                    break;
-                case 2: botPlayedCards.add(randomAttackCard());
             }
         }
 

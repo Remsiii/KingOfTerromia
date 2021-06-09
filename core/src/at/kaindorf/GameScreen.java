@@ -95,10 +95,11 @@ public class GameScreen extends ScreenAdapter {
         stage.draw();
         stage.act(delta);
 
+        /* Next Round Button */
         nextRoundIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextRoundButton)));
-        nextRoundIB.setSize(300,200);
-        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),0);
 
+        nextRoundIB.setSize(300,200);
+        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),65);
 
         nextRoundIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
@@ -108,14 +109,6 @@ public class GameScreen extends ScreenAdapter {
         });
 
         stage.addActor(nextRoundIB);
-        Gdx.input.setInputProcessor(stage);
-        printHandCards(delta);
-        printBotCards();
-        printPlayerCardsAttack();
-        printPlayerCardsDef();
-        printPlayerCardsRes();
-
-
 
         /* Zurück Button zum Hauptmenü */
         backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
@@ -152,6 +145,13 @@ public class GameScreen extends ScreenAdapter {
 
             }
         });
+        Gdx.input.setInputProcessor(stage);
+
+        printHandCards(delta);
+        printBotCards();
+        printPlayerCardsAttack();
+        printPlayerCardsDef();
+        printPlayerCardsRes();
 
         batch.end();
 
@@ -660,5 +660,10 @@ public class GameScreen extends ScreenAdapter {
         }
         batch.end();
         render(delta);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height);
     }
 }
