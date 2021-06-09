@@ -1,5 +1,6 @@
 package at.kaindorf.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -14,6 +15,7 @@ public class DesktopLauncher {
 		config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
 		config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		config.fullscreen = true;
+		config.addIcon("icon/Icon_Terromia.png", Files.FileType.Internal);
 		new LwjglApplication(new KingOfTerromia(), config);
 	}
 }

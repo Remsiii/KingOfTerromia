@@ -48,7 +48,7 @@ public class OptionScreen extends ScreenAdapter {
     private ImageButton backButtonIB;
 
     public OptionScreen() {
-        backButton = new Texture("zurueck.png");
+        backButton = new Texture("pfeil-nach-unten.png");
         skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
         batch = new SpriteBatch();
         screenMode = new SelectBox<String>(skin);
@@ -152,8 +152,8 @@ public class OptionScreen extends ScreenAdapter {
         /* Zurück Button zum Hauptmenü */
         backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
 
-        backButtonIB.setPosition(40,0);
-        backButtonIB.setSize(405,108);
+        backButtonIB.setPosition(40,10);
+        backButtonIB.setSize(105,100);
         stage.addActor(backButtonIB);
 
         backButtonIB.addListener(new ClickListener() {

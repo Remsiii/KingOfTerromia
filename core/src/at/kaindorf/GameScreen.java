@@ -94,7 +94,7 @@ public class GameScreen extends ScreenAdapter {
 
         nextRoundIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextRoundButton)));
         nextRoundIB.setSize(300,200);
-        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),65);
+        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),0);
 
 
         nextRoundIB.addListener(new ClickListener() {
@@ -110,7 +110,8 @@ public class GameScreen extends ScreenAdapter {
         printPlayerCardsAttack();
         printPlayerCardsDef();
         printPlayerCardsRes();
-        batch.end();
+
+
 
         /* Zurück Button zum Hauptmenü */
         backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
@@ -119,7 +120,6 @@ public class GameScreen extends ScreenAdapter {
         backButtonIB.setPosition(Gdx.graphics.getWidth()-backButtonIB.getWidth(),0);
 
         stage.addActor(backButtonIB);
-
 
         backButtonIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
@@ -148,7 +148,7 @@ public class GameScreen extends ScreenAdapter {
             }
         });
 
-
+        batch.end();
 
     }
 
@@ -489,14 +489,14 @@ public class GameScreen extends ScreenAdapter {
         if(card.getCostFood() > playGame.getPlayer().getAktFood() || card.getCostStone() > playGame.getPlayer().getAktStone() || card.getCostWood() > playGame.getPlayer().getAktWood())
         {
             /** Pop-Up Fenster **/
-            Gdx.input.setInputProcessor(stage);
+            Gdx.input.setInputProcessor(stage = new Stage());
             skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
             com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
                 public void result(Object obj) {
                     System.out.println("result "+obj);
                 }
             };
-            dialog.text("You have too little resources to build that card");
+            dialog.text("You have not enough resources to build that card");
             dialog.button("I Understand", true);
             dialog.key(Input.Keys.ENTER, true);
             stage.addActor(dialog);
@@ -539,9 +539,11 @@ public class GameScreen extends ScreenAdapter {
 
             handCardsPlayer.clear();
             setPlayCards(playGame.getPlayer().getHandCards(), 1);
+
+
+            stage.clear();
         }
         batch.end();
-        stage.clear();
         render(delta);
     }
 }
