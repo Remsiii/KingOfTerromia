@@ -98,8 +98,8 @@ public class GameScreen extends ScreenAdapter {
         /* Next Round Button */
         nextRoundIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextRoundButton)));
 
-        nextRoundIB.setSize(300,200);
-        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),65);
+        nextRoundIB.setSize(nextRoundButton.getWidth(), nextRoundButton.getHeight());
+        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth()-45,100);
 
         nextRoundIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
@@ -113,8 +113,8 @@ public class GameScreen extends ScreenAdapter {
         /* Zurück Button zum Hauptmenü */
         backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
 
-        backButtonIB.setSize(300,200);
-        backButtonIB.setPosition(Gdx.graphics.getWidth()-backButtonIB.getWidth(),0);
+        backButtonIB.setSize(backButton.getWidth(),backButton.getHeight());
+        backButtonIB.setPosition(Gdx.graphics.getWidth()-backButtonIB.getWidth()-45,35);
 
         stage.addActor(backButtonIB);
 
@@ -145,6 +145,7 @@ public class GameScreen extends ScreenAdapter {
 
             }
         });
+
         Gdx.input.setInputProcessor(stage);
 
         printHandCards(delta);
