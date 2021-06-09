@@ -121,8 +121,41 @@ public class PlayGame {
         }
         else if(game.getAktRound() < 10)
         {
-            handCards.add(randomResCard());
-            handCards.add(randomResCard());
+            if(game.getPlayer().getPlayerCardsRes().size()==10)
+            {
+                for (int i = 0; i < 2; i++) {
+                    int zz = rand.nextInt(2)+1;
+
+                    if(zz==1)
+                    {
+                        handCards.add(randomDefCard());
+                    }
+                    else
+                    {
+                        handCards.add(randomAttackCard());
+                    }
+                }
+            }
+            else if(game.getPlayer().getPlayerCardsRes().size()==9)
+            {
+                handCards.add(randomResCard());
+                //Zufall ob Attack OR Def
+                int zz = rand.nextInt(2)+1;
+
+                if(zz==1)
+                {
+                    handCards.add(randomDefCard());
+                }
+                else
+                {
+                    handCards.add(randomAttackCard());
+                }
+            }
+            else
+            {
+                handCards.add(randomResCard());
+                handCards.add(randomResCard());
+            }
             handCards.add(randomDefCard());
             handCards.add(randomAttackCard());
 
@@ -140,21 +173,22 @@ public class PlayGame {
         }
         else if(game.getAktRound() >= 10 && game.getAktRound() < 20)
         {
-            int zz = rand.nextInt(3)+1;
-            switch (zz)
+            int count = 2; //Je nachdem ob schon 10 Ressourcen Karten oder nicht
+            if(game.getPlayer().getPlayerCardsRes().size()==10)
             {
-                case 1: handCards.add(randomDefCard());
-                    break;
-                case 2: handCards.add(randomAttackCard());
-                    break;
-                default: handCards.add(0,randomResCard());
+                count=3;
             }
+            else
+            {
+                handCards.add(randomResCard());
+            }
+
             handCards.add(randomDefCard());
             handCards.add(randomAttackCard());
 
             //Zufall ob Attack oder Defense Karte
-            for (int i = 0; i < 2; i++) {
-                zz = rand.nextInt(2)+1;
+            for (int i = 0; i < count; i++) {
+                int zz = rand.nextInt(2)+1;
                 if(zz==1)
                 {
                     handCards.add(randomDefCard());

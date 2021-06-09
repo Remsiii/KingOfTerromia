@@ -73,7 +73,7 @@ public class GameScreen extends ScreenAdapter {
         round.add(new Texture("rounds/1.png"));
         setPlayCards(playGame.getPlayer().getHandCards(),1);
         setPlayCards(playGame.getBot().getAktCards(),2);
-        background = new Texture("middleageWallpaper.jpg");
+        background = new Texture("Hintergrund.png");
 
     }
 
@@ -94,7 +94,7 @@ public class GameScreen extends ScreenAdapter {
 
         nextRoundIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextRoundButton)));
         nextRoundIB.setSize(300,200);
-        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),0);
+        nextRoundIB.setPosition(Gdx.graphics.getWidth()-nextRoundIB.getWidth(),65);
 
 
         nextRoundIB.addListener(new ClickListener() {
@@ -115,9 +115,11 @@ public class GameScreen extends ScreenAdapter {
         /* Zurück Button zum Hauptmenü */
         backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
 
-        backButtonIB.setPosition(1598,0);
-        backButtonIB.setSize(345,78);
+        backButtonIB.setSize(300,200);
+        backButtonIB.setPosition(Gdx.graphics.getWidth()-backButtonIB.getWidth(),0);
+
         stage.addActor(backButtonIB);
+
 
         backButtonIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
@@ -487,7 +489,7 @@ public class GameScreen extends ScreenAdapter {
         if(card.getCostFood() > playGame.getPlayer().getAktFood() || card.getCostStone() > playGame.getPlayer().getAktStone() || card.getCostWood() > playGame.getPlayer().getAktWood())
         {
             /** Pop-Up Fenster **/
-            Gdx.input.setInputProcessor(stage = new Stage());
+            Gdx.input.setInputProcessor(stage);
             skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
             com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
                 public void result(Object obj) {
@@ -499,10 +501,6 @@ public class GameScreen extends ScreenAdapter {
             dialog.key(Input.Keys.ENTER, true);
             stage.addActor(dialog);
             dialog.show(stage);
-        }
-        else if(playGame.getPlayer().getPlayerCardsRes().size()==10 && card instanceof RessourceCard)
-        {
-            //Dialog maximale Resourcen Karten erreicht!!
         }
         else
         {
