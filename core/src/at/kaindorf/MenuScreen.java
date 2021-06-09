@@ -31,7 +31,7 @@ import java.awt.*;
 public class MenuScreen extends ScreenAdapter {
 
     SpriteBatch batch;
-    Texture img,play,quit,opt,logo,cursor,background;
+    Texture img,play,quit,opt,logo,cursor,background,rul;
     private Stage stage = new Stage();
     ImageButton start,option,beenden,logoBt,rules;
     public static Music music = Gdx.audio.newMusic(Gdx.files.internal("MainMenuOST.mp3"));
@@ -45,6 +45,7 @@ public class MenuScreen extends ScreenAdapter {
         img = new Texture("badlogic.jpg");
         play = new Texture("play.png");
         quit = new Texture("quit.png");
+        rul = new Texture("rules.png");
         opt = new Texture("opt.png");
         logo = new Texture("KOT_Logo.png");
         cursor = new Texture(("cursor.png"));
@@ -52,7 +53,7 @@ public class MenuScreen extends ScreenAdapter {
         start = new ImageButton(new TextureRegionDrawable(new TextureRegion(play)));
         beenden = new ImageButton(new TextureRegionDrawable(new TextureRegion(quit)));
         option = new ImageButton(new TextureRegionDrawable(new TextureRegion(opt)));
-        rules = new ImageButton(new TextureRegionDrawable(new TextureRegion(opt)));
+        rules = new ImageButton(new TextureRegionDrawable(new TextureRegion(rul)));
         logoBt = new ImageButton(new TextureRegionDrawable(new TextureRegion(logo)));
     }
 
@@ -86,17 +87,17 @@ public class MenuScreen extends ScreenAdapter {
         Table menuTable = new Table();
         menuTable.add(logoBt);
         menuTable.row();
-        menuTable.add(start).width(start.getWidth()*0.3f).height(start.getHeight()*0.3f)
-                .padTop(Gdx.graphics.getHeight()/10);
+        menuTable.add(start).width(start.getWidth()).height(start.getHeight())
+                .padTop(Gdx.graphics.getHeight()/11);
         menuTable.row();
-        menuTable.add(option).width(option.getWidth()*0.3f).height(option.getHeight()*0.3f)
-                .padTop(Gdx.graphics.getHeight()/10);
+        menuTable.add(rules).width(rules.getWidth()).height(rules.getHeight())
+                .padTop(Gdx.graphics.getHeight()/11);
         menuTable.row();
-        menuTable.add(rules).width(beenden.getWidth()*0.3f).height(beenden.getHeight()*0.3f)
-                .padTop(Gdx.graphics.getHeight()/10);
+        menuTable.add(option).width(option.getWidth()).height(option.getHeight())
+                .padTop(Gdx.graphics.getHeight()/11);
         menuTable.row();
-        menuTable.add(beenden).width(beenden.getWidth()*0.3f).height(beenden.getHeight()*0.3f)
-                .padTop(Gdx.graphics.getHeight()/10);
+        menuTable.add(beenden).width(beenden.getWidth()).height(beenden.getHeight())
+                .padTop(Gdx.graphics.getHeight()/11);
         menuTable.setFillParent(true);
         stage.addActor(menuTable);
 
@@ -184,6 +185,4 @@ public class MenuScreen extends ScreenAdapter {
     public void hide() {
         this.dispose();
     }
-
-
 }

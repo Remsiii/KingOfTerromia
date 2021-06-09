@@ -24,8 +24,8 @@ public class RuleScreen extends ScreenAdapter {
     private Stage stage = new Stage(new ScreenViewport());
 
     public RuleScreen() {
-        menuTex = new Texture("backtomainmenu.png");
-        background = new Texture("rules.png");
+        menuTex = new Texture("pfeil-nach-unten.png");
+        background = new Texture("game_rules.png");
     }
 
     @Override
@@ -54,6 +54,9 @@ public class RuleScreen extends ScreenAdapter {
                 KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
             }
         });
+
+        menuBt.setPosition(40,10);
+        menuBt.setSize(105,100);
 
         stage.addActor(menuBt);
     }

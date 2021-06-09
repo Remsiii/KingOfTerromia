@@ -272,7 +272,7 @@ public class GameScreen extends ScreenAdapter {
                 break;
             handCardsPlayerIB.add(index,new ImageButton(new TextureRegionDrawable(new TextureRegion(hcards))));
             handCardsPlayerIB.get(index).setSize(120.0f, 150.0f);
-            handCardsPlayerIB.get(index).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, 0);
+            handCardsPlayerIB.get(index).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, 10);
             final int fIndex = index;
             final float fdelta = delta;
             final int test = testZahl;
@@ -298,7 +298,7 @@ public class GameScreen extends ScreenAdapter {
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     handCardsPlayerIB.get(fIndex).clear();
                     handCardsPlayerIB.get(fIndex).setSize(120.0f, 150.0f);
-                    handCardsPlayerIB.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + test, 0);
+                    handCardsPlayerIB.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + test, 10);
                 }
             });
 
@@ -316,7 +316,7 @@ public class GameScreen extends ScreenAdapter {
     {
         int testZahl = - 720;
         for (Texture hcards : playedCardsBot) {
-            testZahl = testZahl + 240;
+            testZahl = testZahl + 260;
             batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-350.0f, 240.0f, 300.0f);
         }
     }
