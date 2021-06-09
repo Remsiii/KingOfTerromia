@@ -32,16 +32,16 @@ import java.nio.file.Paths;
  * @project: KingOfTerromia
  */
 public class OptionScreen extends ScreenAdapter {
-    SpriteBatch batch;
-    SelectBox<String> screenMode;
-    Skin skin;
+    private SpriteBatch batch;
+    private SelectBox<String> screenMode;
+    private Skin skin;
     private Stage stage = new Stage(new ScreenViewport());
-    Dialog dialog;
-    Slider musicVol;
-    BitmapFont font = new BitmapFont();
-    TextField volume;
-    Texture mute,noMute, titleTex, background;
-    ImageButton muteBt, title;
+    private Dialog dialog;
+    private Slider musicVol;
+    private BitmapFont font = new BitmapFont();
+    private TextField volume;
+    private Texture mute,noMute, titleTex, background;
+    private ImageButton muteBt, title;
     boolean isMute = true;
     public static boolean startW = false;
     private Texture backButton;
@@ -59,35 +59,41 @@ public class OptionScreen extends ScreenAdapter {
         noMute = new Texture("noMute.png");
         titleTex = new Texture("optionsHeading.png");
         background = new Texture("optionScreenBackground.jpg");
+        muteBt = new ImageButton(new TextureRegionDrawable(new TextureRegion(mute)),
+                new TextureRegionDrawable(new TextureRegion(mute)),
+                new TextureRegionDrawable(new TextureRegion(noMute)));
+        title = new ImageButton(new TextureRegionDrawable(new TextureRegion(titleTex)));
     }
 
+    /**
+     * Methode zum rendern von Texturen
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         batch.begin();
         stage.getBatch().begin();
-
-
         BitmapFont font = new BitmapFont();
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        font.setColor(Color.BLACK);
-        //SpriteBatch batch = new SpriteBatch();
-        stage.act(Gdx.graphics.getDeltaTime());
+
+        //Hintergrund setzen
         stage.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+
         stage.getBatch().end();
         stage.draw();
         stage.act(delta);
         batch.end();
     }
 
+    /**
+     * Methode die aufgerufen wird, wenn dieser Screen zum aktuellen Screen wird.
+     */
     @Override
     public void show() {
         Table optionTable = new Table();
-        muteBt = new ImageButton(new TextureRegionDrawable(new TextureRegion(mute)),
-                new TextureRegionDrawable(new TextureRegion(mute)), new TextureRegionDrawable(new TextureRegion(noMute)));
-        title = new ImageButton(new TextureRegionDrawable(new TextureRegion(titleTex)));
+
         screenMode.setItems("Fullscreen","Windowmode");
         screenMode.getStyle().listStyle.font.getData().scale(0.3f);
+
         musicVol.setValue(1);
 
         //Table zum Anzeigen der Elemente
@@ -103,6 +109,8 @@ public class OptionScreen extends ScreenAdapter {
 
         volume.setDisabled(true);
         volume.setText(String.format("%.0f%%",musicVol.getValue()*100));
+
+        //Dropdown Liste zum ändern des Anzeigemodus
         screenMode.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -117,6 +125,7 @@ public class OptionScreen extends ScreenAdapter {
             }
         });
 
+        //Slider zum ändern der Musiklautstärke
         musicVol.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -126,10 +135,10 @@ public class OptionScreen extends ScreenAdapter {
                     }
                     volume.setText(String.format("%.0f%%",musicVol.getValue()*100));
                 }
-
             }
         });
 
+        //Button um Musik zu muten
         muteBt.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 MenuScreen.clickEffect.play();
@@ -140,7 +149,6 @@ public class OptionScreen extends ScreenAdapter {
                 }else{
                     muteBt.setChecked(true);
                     MenuScreen.music.setVolume(0);
-
                 }
             }
         });
@@ -150,6 +158,7 @@ public class OptionScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
         /* Zurück Button zum Hauptmenü */
+
         backButtonIB = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButton)));
 
         backButtonIB.setPosition(40,10);
@@ -158,23 +167,36 @@ public class OptionScreen extends ScreenAdapter {
 
         backButtonIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                MenuScreen.clickEffect.play();
                 KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
             }
         });
 
     }
 
+    /**
+     * Methode die aufgerufen wird wenn sich die Größe des Fensters verändert.
+     * Die Stage wird auf die entsprechende Größe angepasst.
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);
     }
 
+    /**
+     * Alle ressourcen werden freigegeben und nicht mehr gerendert.
+     */
     @Override
     public void dispose() {
         batch.dispose();
         stage.dispose();
     }
 
+    /**
+     * Wird aufgerufen wenn der Screen gewechselt wird.
+     */
     @Override
     public void hide() {
         this.dispose();

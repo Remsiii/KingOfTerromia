@@ -4,12 +4,14 @@ import at.kaindorf.beans.*;
 import at.kaindorf.game.PlayGame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -32,9 +34,9 @@ public class GameScreen extends ScreenAdapter {
     SpriteBatch batch;
     private List<Texture> handCardsPlayer = new LinkedList<>();
     private List<Texture> playedCardsBot = new LinkedList<>();
-    private List<Texture> playedCardsPlayerRes = new LinkedList<>();
-    private List<Texture> playedCardsPlayerDef = new LinkedList<>();
-    private List<Texture> playedCardsPlayerAttack = new LinkedList<>();
+    private List<ImageButton> playedCardsPlayerRes = new LinkedList<>();
+    private List<ImageButton> playedCardsPlayerDef = new LinkedList<>();
+    private List<ImageButton> playedCardsPlayerAttack = new LinkedList<>();
     private List<Texture> hpBot = new LinkedList<>();
     private List<Texture> hpPlayer = new LinkedList<>();
     private Texture nextRoundButton;
@@ -42,6 +44,7 @@ public class GameScreen extends ScreenAdapter {
     private PlayGame playGame = new PlayGame();
     private ImageButton nextRoundIB;
     private List<ImageButton> handCardsPlayerIB = new LinkedList<>();
+    private List<ImageButton> handCardsPlayerIBBig = new LinkedList<>();
     private Stage stage = new Stage();
     private List<Texture> aktFoodList = new LinkedList<>();
     private List<Texture> aktStoneList = new LinkedList<>();
@@ -99,6 +102,7 @@ public class GameScreen extends ScreenAdapter {
 
         nextRoundIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
+                MenuScreen.clickEffect.play();
                 nextRound();
             }
         });
@@ -124,6 +128,7 @@ public class GameScreen extends ScreenAdapter {
         backButtonIB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 /** Pop-Up Fenster **/
+                MenuScreen.clickEffect.play();
                 Gdx.input.setInputProcessor(stage = new Stage());
                 skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
                 com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
@@ -178,7 +183,8 @@ public class GameScreen extends ScreenAdapter {
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/attack/archers.jpg"));
                             else if(type==3)
-                                playedCardsPlayerAttack.add(new Texture("cards/attack/archers.jpg"));
+                                //playedCardsPlayerAttack.add(new Texture("cards/attack/archers.jpg"));
+                            playedCardsPlayerAttack.add(new ImageButton(new TextureRegionDrawable(new Texture("cards/attack/archers.jpg"))));
                         break;
                     case PIKEMEN:
                             if(type==1)
@@ -186,7 +192,8 @@ public class GameScreen extends ScreenAdapter {
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/attack/pikemen.jpg"));
                             else if(type==3)
-                                playedCardsPlayerAttack.add(new Texture("cards/attack/pikemen.jpg"));
+                                //playedCardsPlayerAttack.add(new Texture("cards/attack/pikemen.jpg"));
+                                playedCardsPlayerAttack.add(new ImageButton(new TextureRegionDrawable(new Texture("cards/attack/pikemen.jpg"))));
                 }
             }
             else if(card instanceof DefenseCard)
@@ -199,7 +206,8 @@ public class GameScreen extends ScreenAdapter {
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/defense/tower.jpg"));
                             else if(type==3)
-                                playedCardsPlayerDef.add(new Texture("cards/defense/tower.jpg"));
+                                //playedCardsPlayerDef.add(new Texture("cards/defense/tower.jpg"));
+                                playedCardsPlayerDef.add(new ImageButton(new TextureRegionDrawable(new Texture("cards/defense/tower.jpg"))));
                         break;
                     case WALL:
                             if(type==1)
@@ -207,7 +215,8 @@ public class GameScreen extends ScreenAdapter {
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/defense/wall.jpg"));
                             else if(type==3)
-                                playedCardsPlayerDef.add(new Texture("cards/defense/wall.jpg"));
+                                //playedCardsPlayerDef.add(new Texture("cards/defense/wall.jpg"));
+                                playedCardsPlayerDef.add(new ImageButton(new TextureRegionDrawable(new Texture("cards/defense/wall.jpg"))));
                 }
             }
             else
@@ -220,7 +229,8 @@ public class GameScreen extends ScreenAdapter {
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/ressource/hunterhut.jpg"));
                             else if(type==3)
-                                playedCardsPlayerRes.add(new Texture("cards/ressource/hunterhut.jpg"));
+                                //playedCardsPlayerRes.add(new Texture("cards/ressource/hunterhut.jpg"));
+                                playedCardsPlayerRes.add(new ImageButton(new TextureRegionDrawable(new Texture("cards/ressource/hunterhut.jpg"))));
                         break;
                     case LUMBERJACKHUT:
                             if(type==1)
@@ -228,7 +238,8 @@ public class GameScreen extends ScreenAdapter {
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/ressource/lumberjackhut.jpg"));
                             else if(type==3)
-                                playedCardsPlayerRes.add(new Texture("cards/ressource/lumberjackhut.jpg"));
+                                //playedCardsPlayerRes.add(new Texture("cards/ressource/lumberjackhut.jpg"));
+                                playedCardsPlayerRes.add(new ImageButton(new TextureRegionDrawable(new Texture("cards/ressource/lumberjackhut.jpg"))));
                         break;
                     case STONEMINE:
                             if(type==1)
@@ -236,7 +247,8 @@ public class GameScreen extends ScreenAdapter {
                             else if(type==2)
                                 playedCardsBot.add(new Texture("cards/ressource/stonemine.jpg"));
                             else if(type==3)
-                                playedCardsPlayerRes.add(new Texture("cards/ressource/stonemine.jpg"));
+                                //playedCardsPlayerRes.add(new Texture("cards/ressource/stonemine.jpg"));
+                                playedCardsPlayerRes.add(new ImageButton(new TextureRegionDrawable(new Texture("cards/ressource/stonemine.jpg"))));
                 }
             }
 
@@ -259,15 +271,37 @@ public class GameScreen extends ScreenAdapter {
             if(hcards==null)
                 break;
             handCardsPlayerIB.add(index,new ImageButton(new TextureRegionDrawable(new TextureRegion(hcards))));
-            handCardsPlayerIB.get(index).setSize(240.0f, 300.0f);
+            handCardsPlayerIB.get(index).setSize(120.0f, 150.0f);
             handCardsPlayerIB.get(index).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, 0);
             final int fIndex = index;
             final float fdelta = delta;
+            final int test = testZahl;
+
             handCardsPlayerIB.get(index).addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y){
-                    clickedCard(fIndex, fdelta);
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                        MenuScreen.clickEffect.play();
+                        clickedCard(fIndex, fdelta);
+                }
+
+                /**
+                 * Wenn über eine Karte mit der Maus gehovert wird, wird sie vergroeßter angezeigt.
+                 * Von Meister Michael
+                 */
+               @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    handCardsPlayerIB.get(fIndex).setSize(240.0f, 300.0f);
+                    handCardsPlayerIB.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                }
+
+               @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    handCardsPlayerIB.get(fIndex).clear();
+                    handCardsPlayerIB.get(fIndex).setSize(120.0f, 150.0f);
+                    handCardsPlayerIB.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + test, 0);
                 }
             });
+
 
             stage.addActor(handCardsPlayerIB.get(index));
             Gdx.input.setInputProcessor(stage);
@@ -292,10 +326,38 @@ public class GameScreen extends ScreenAdapter {
      */
     public void printPlayerCardsAttack()
     {
+        stage.draw();
         int testZahl = - 720;
-        for (Texture hcards : playedCardsPlayerAttack) {
-            testZahl = testZahl + 240;
-            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-500.0f, 240.0f, 300.0f);
+        int i = 0;
+        for (ImageButton hcards : playedCardsPlayerAttack) {
+            final int fIndex = i;
+            testZahl = testZahl + 120;
+            final int fTest = testZahl;
+            //batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-500.0f, 240.0f, 300.0f);
+            playedCardsPlayerAttack.get(fIndex).setSize(120.0f,150.0f);
+            playedCardsPlayerAttack.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-520.0f);
+
+            playedCardsPlayerAttack.get(fIndex).addListener(new ClickListener() {
+                /**
+                 * Wenn über eine Karte mit der Maus gehovert wird, wird sie vergroeßter angezeigt.
+                 * Von Meister Michael
+                 */
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    playedCardsPlayerAttack.get(fIndex).setSize(240.0f, 300.0f);
+                    playedCardsPlayerAttack.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    //playedCardsPlayerAttack.get(fIndex).clear();
+                    playedCardsPlayerAttack.get(fIndex).setSize(120.0f,150.0f);
+                    playedCardsPlayerAttack.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + fTest, Gdx.graphics.getHeight()-520.0f);
+                }
+            });
+
+            stage.addActor(playedCardsPlayerAttack.get(fIndex));
+            i++;
         }
     }
 
@@ -304,10 +366,36 @@ public class GameScreen extends ScreenAdapter {
      */
     public void printPlayerCardsDef()
     {
+        int i = 0;
         int testZahl = - 720;
-        for (Texture hcards : playedCardsPlayerDef) {
-            testZahl = testZahl + 240;
-            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-700.0f, 240.0f, 300.0f);
+        for (ImageButton hcards : playedCardsPlayerDef) {
+            final int fIndex = i;
+            testZahl = testZahl + 120;
+            final int fTest = testZahl;
+            //batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-700.0f, 240.0f, 300.0f);
+            playedCardsPlayerDef.get(fIndex).setSize(120.0f,150.0f);
+            playedCardsPlayerDef.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-700.0f);
+
+            playedCardsPlayerDef.get(fIndex).addListener(new ClickListener() {
+                /**
+                 * Wenn über eine Karte mit der Maus gehovert wird, wird sie vergroeßter angezeigt.
+                 * Von Meister Michael
+                 */
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    playedCardsPlayerDef.get(fIndex).setSize(240.0f, 300.0f);
+                    playedCardsPlayerDef.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    playedCardsPlayerDef.get(fIndex).setSize(120.0f,150.0f);
+                    playedCardsPlayerDef.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + fTest, Gdx.graphics.getHeight()-700.0f);
+                }
+            });
+
+            stage.addActor(playedCardsPlayerDef.get(fIndex));
+            i++;
         }
     }
 
@@ -316,10 +404,37 @@ public class GameScreen extends ScreenAdapter {
      */
     public void printPlayerCardsRes()
     {
+        int i = 0;
         int testZahl = - 720;
-        for (Texture hcards : playedCardsPlayerRes) {
-            testZahl = testZahl + 240;
-            batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-900.0f, 240.0f, 300.0f);
+        for (ImageButton hcards : playedCardsPlayerRes) {
+            final int fIndex = i;
+            testZahl = testZahl + 120;
+            final int fTest = testZahl;
+            //batch.draw(hcards, Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-900.0f, 240.0f, 300.0f);
+            playedCardsPlayerRes.get(fIndex).setSize(120.0f,150.0f);
+            playedCardsPlayerRes.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + testZahl, Gdx.graphics.getHeight()-900.0f);
+
+            playedCardsPlayerRes.get(fIndex).addListener(new ClickListener() {
+                /**
+                 * Wenn über eine Karte mit der Maus gehovert wird, wird sie vergroeßter angezeigt.
+                 * Von Meister Michael
+                 */
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    playedCardsPlayerRes.get(fIndex).setSize(240.0f, 300.0f);
+                    playedCardsPlayerRes.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    //playedCardsPlayerAttack.get(fIndex).clear();
+                    playedCardsPlayerRes.get(fIndex).setSize(120.0f,150.0f);
+                    playedCardsPlayerRes.get(fIndex).setPosition(Gdx.graphics.getWidth()/2 - (240.0f/2) + fTest, Gdx.graphics.getHeight()-900.0f);
+                }
+            });
+
+            stage.addActor(playedCardsPlayerRes.get(fIndex));
+            i++;
         }
     }
 
@@ -349,7 +464,7 @@ public class GameScreen extends ScreenAdapter {
         for (Texture hcards : playedCardsBot) {
             hcards.dispose();
         }
-        for (Texture hcards : playedCardsPlayerDef) {
+        /*for (Texture hcards : playedCardsPlayerDef) {
             hcards.dispose();
         }
         for (Texture hcards : playedCardsPlayerAttack) {
@@ -357,7 +472,7 @@ public class GameScreen extends ScreenAdapter {
         }
         for (Texture hcards : playedCardsPlayerRes) {
             hcards.dispose();
-        }
+        }*/
 
         handCardsPlayer.clear();
         playedCardsBot.clear();
