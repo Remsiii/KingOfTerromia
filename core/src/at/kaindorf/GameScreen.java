@@ -87,7 +87,7 @@ public class GameScreen extends ScreenAdapter {
         round.add(new Texture("rounds/1.png"));
         setPlayCards(playGame.getPlayer().getHandCards(),1);
         setPlayCards(playGame.getBot().getAktCards(),2);
-        background = new Texture("Hintergrund.png");
+        background = new Texture("hintergrund_game_Infos.png");
 
     }
 
@@ -137,7 +137,7 @@ public class GameScreen extends ScreenAdapter {
                 skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
                 com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
                     public void result(Object obj) {
-                        System.out.println("result "+obj);
+                        //System.out.println("result "+obj);
                         if(obj.equals(true))
                         {
                             KingOfTerromia.INSTANCE.setScreen(new MenuScreen());
@@ -620,7 +620,7 @@ public class GameScreen extends ScreenAdapter {
             skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
             com.badlogic.gdx.scenes.scene2d.ui.Dialog dialog = new Dialog("Warning", skin, "dialog") {
                 public void result(Object obj) {
-                    System.out.println("result "+obj);
+                   // System.out.println("result "+obj);
                 }
             };
             dialog.text("You have not enough resources to build that card");
