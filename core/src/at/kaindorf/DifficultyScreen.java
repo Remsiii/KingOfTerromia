@@ -20,6 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * @author: Michael Meister
+ * @date: 16.06.2021
+ * @project: KingOfTerromia
+ */
 public class DifficultyScreen extends ScreenAdapter {
 
     private String difficulty = "Medium";

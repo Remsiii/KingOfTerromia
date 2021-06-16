@@ -1,15 +1,14 @@
 package at.kaindorf;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /*
 	Klasse als Singleton implementiert.
 */
+/**
+ * @author: Daniel Remetan
+ * @date: 24.03.2021
+ * @project: KingOfTerromia
+ */
 public class KingOfTerromia extends Game {
 
 	public static KingOfTerromia INSTANCE;
