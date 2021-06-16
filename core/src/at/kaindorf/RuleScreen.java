@@ -15,7 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
+/**
+ * @author: Meister Michael
+ * @date: 09.06.2021
+ * @project: KingOfTerromia
+ */
 public class RuleScreen extends ScreenAdapter {
 
     private Texture background, menuTex;
