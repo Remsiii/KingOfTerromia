@@ -4,10 +4,7 @@ import at.kaindorf.EndScreen;
 import at.kaindorf.GameScreen;
 import at.kaindorf.KingOfTerromia;
 import at.kaindorf.beans.*;
-import at.kaindorf.enums.AttackCardTypes;
-import at.kaindorf.enums.DefenseCardTypes;
-import at.kaindorf.enums.RessourceCardTypes;
-import at.kaindorf.enums.RessourceTypes;
+import at.kaindorf.enums.*;
 import com.badlogic.gdx.graphics.Texture;
 import sun.awt.image.ImageWatched;
 
@@ -26,9 +23,9 @@ public class PlayGame {
     private GameBeans game;
     private boolean won;
 
-    public PlayGame() {
+    public PlayGame(BotDifficult difficult) {
         player = new Player(200, new LinkedList<Card>() , new LinkedList<Card>(), new LinkedList<Card>(), new LinkedList<Card>(), 15, 0, 5);
-        bot = new Bot(200, new LinkedList<Card>());
+        bot = new Bot(200, new LinkedList<Card>(), difficult);
         game = new GameBeans(player,bot,0);
         startNextRound();
     }
@@ -214,51 +211,16 @@ public class PlayGame {
 
         //Karten die der Bot spielt
         List<Card> botPlayedCards = new LinkedList<>();
-        if(game.getAktRound() == 1)
+        switch(bot.getBotDifficult())
         {
+            case EASY: botPlayedCards = botEasy();
+                break;
+            case MEDIUM: botPlayedCards = botMedium();
+                break;
+            case HARD: botPlayedCards = botHard();
+        }
 
-        }
-        else if(game.getAktRound() < 4)
-        {
-            botPlayedCards.add(randomDefCard());
-        }
-        else if(game.getAktRound() >= 4 && game.getAktRound() < 7)
-        {
-            botPlayedCards.add(randomAttackCard());
-            botPlayedCards.add(randomDefCard());
-        }
-        else if(game.getAktRound() >= 7 && game.getAktRound() < 17)
-        {
 
-            botPlayedCards.add(randomAttackCard());
-            int anzDefCard=1;
-            int zz = rand.nextInt(3)+1;
-            switch (zz)
-            {
-                case 1: anzDefCard++;
-                    break;
-                case 2: botPlayedCards.add(randomAttackCard());
-            }
-            for (int i = 0; i < anzDefCard; i++) {
-                botPlayedCards.add(randomDefCard());
-            }
-        }
-        else
-        {
-            botPlayedCards.add(randomAttackCard());
-            int anzDefCard = 1;
-            int zz = rand.nextInt(2)+1;
-            for (int i = 0; i < 2; i++) {
-                if (zz == 1) {
-                    anzDefCard++;
-                } else {
-                    botPlayedCards.add(randomAttackCard());
-                }
-            }
-            for (int i = 0; i < anzDefCard; i++) {
-                botPlayedCards.add(randomDefCard());
-            }
-        }
 
         for (Card card:player.getPlayerCardsRes()) {
             switch (((RessourceCard) card).getRessourceCardType())
@@ -340,6 +302,198 @@ public class PlayGame {
         }
 
         return ressourceCard;
+    }
+
+    /**
+     * Schwierigkeit: HardBot
+     * Je nach schwirigkeit bekommt der Bot Karten
+     * @return List<Card>
+     */
+    public List<Card> botHard()
+    {
+        List<Card> botPlayedCards = new LinkedList<>();
+        Random rand = new Random();
+        if(game.getAktRound() == 1)
+        {
+
+        }
+        else if(game.getAktRound() ==2)
+        {
+            botPlayedCards.add(randomAttackCard());
+            botPlayedCards.add(randomDefCard());
+        }
+        else if(game.getAktRound() >= 3 && game.getAktRound() < 7)
+        {
+            botPlayedCards.add(randomAttackCard());
+            botPlayedCards.add(randomDefCard());
+            botPlayedCards.add(randomDefCard());
+        }
+        else if(game.getAktRound() >= 7 && game.getAktRound() < 17)
+        {
+            botPlayedCards.add(randomAttackCard());
+            botPlayedCards.add(randomAttackCard());
+            int anzDefCard=1;
+            int zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: anzDefCard++;
+                    break;
+                case 2: botPlayedCards.add(randomAttackCard());
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
+            }
+        }
+        else if(game.getAktRound() >= 17 && game.getAktRound() < 25)
+        {
+            botPlayedCards.add(randomAttackCard());
+            int anzDefCard = 1;
+            int zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: anzDefCard++;
+                    break;
+                case 2: botPlayedCards.add(randomAttackCard());
+            }
+            zz = rand.nextInt(2)+1;
+            for (int i = 0; i < 3; i++) {
+                if (zz == 1) {
+                    anzDefCard++;
+                } else {
+                    botPlayedCards.add(randomAttackCard());
+                }
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
+            }
+        }
+        else
+        {
+            botPlayedCards.add(randomAttackCard());
+            int anzDefCard = 1;
+            int zz = rand.nextInt(2)+1;
+            for (int i = 0; i < 4; i++) {
+                if (zz == 1) {
+                    anzDefCard++;
+                } else {
+                    botPlayedCards.add(randomAttackCard());
+                }
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
+            }
+        }
+        return botPlayedCards;
+    }
+
+    /**
+     * Schwierigkeit Medium Bot
+     * Je nach schwirigkeit bekommt der Bot Karten
+     * @return List<Card>
+     */
+    public List<Card> botMedium()
+    {
+        List<Card> botPlayedCards = new LinkedList<>();
+        Random rand = new Random();
+        if(game.getAktRound() == 1)
+        {
+
+        }
+        else if(game.getAktRound() < 4)
+        {
+            botPlayedCards.add(randomDefCard());
+        }
+        else if(game.getAktRound() >= 4 && game.getAktRound() < 7)
+        {
+            botPlayedCards.add(randomAttackCard());
+            botPlayedCards.add(randomDefCard());
+            botPlayedCards.add(randomDefCard());
+        }
+        else if(game.getAktRound() >= 7 && game.getAktRound() < 17)
+        {
+
+            botPlayedCards.add(randomAttackCard());
+            int anzDefCard=1;
+            int zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: anzDefCard++;
+                    break;
+                case 2: botPlayedCards.add(randomAttackCard());
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
+            }
+        }
+        else
+        {
+            botPlayedCards.add(randomAttackCard());
+            int anzDefCard = 1;
+            int zz = rand.nextInt(2)+1;
+            for (int i = 0; i < 2; i++) {
+                if (zz == 1) {
+                    anzDefCard++;
+                } else {
+                    botPlayedCards.add(randomAttackCard());
+                }
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
+            }
+        }
+        return botPlayedCards;
+    }
+
+    /**
+     * Schwierigkeit EasyBot
+     * Je nach schwirigkeit bekommt der Bot Karten
+     * @return List<Card>
+     */
+    public List<Card> botEasy()
+    {
+        List<Card> botPlayedCards = new LinkedList<>();
+        Random rand = new Random();
+        if(game.getAktRound() < 4)
+        {
+
+        }
+        else if(game.getAktRound() >= 4 && game.getAktRound() < 7)
+        {
+            botPlayedCards.add(randomDefCard());
+        }
+        else if(game.getAktRound() >= 7 && game.getAktRound() < 17)
+        {
+
+            botPlayedCards.add(randomAttackCard());
+            int anzDefCard=0;
+            int zz = rand.nextInt(3)+1;
+            switch (zz)
+            {
+                case 1: anzDefCard++;
+                    break;
+                case 2: botPlayedCards.add(randomAttackCard());
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
+            }
+        }
+        else
+        {
+            botPlayedCards.add(randomAttackCard());
+            int anzDefCard = 0;
+            int zz = rand.nextInt(2)+1;
+            for (int i = 0; i < 2; i++) {
+                if (zz == 1) {
+                    anzDefCard++;
+                } else {
+                    botPlayedCards.add(randomAttackCard());
+                }
+            }
+            for (int i = 0; i < anzDefCard; i++) {
+                botPlayedCards.add(randomDefCard());
+            }
+        }
+        return botPlayedCards;
     }
 
     public Player getPlayer() {

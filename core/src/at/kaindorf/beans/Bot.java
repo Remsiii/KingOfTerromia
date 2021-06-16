@@ -1,5 +1,7 @@
 package at.kaindorf.beans;
 
+import at.kaindorf.enums.BotDifficult;
+
 import java.util.List;
 
 /**
@@ -10,10 +12,12 @@ import java.util.List;
 public class Bot {
     private int hp;
     private List<Card> aktCards; //Aktuelle Karten die bot gecrafted hat
+    private BotDifficult botDifficult;
 
-    public Bot(int hp, List<Card> aktCards) {
+    public Bot(int hp, List<Card> aktCards, BotDifficult botDifficult) {
         this.hp = hp;
         this.aktCards = aktCards;
+        this.botDifficult = botDifficult;
     }
 
     public int getHp() {
@@ -30,5 +34,13 @@ public class Bot {
 
     public void setAktCards(List<Card> aktCards) {
         this.aktCards = aktCards;
+    }
+
+    public BotDifficult getBotDifficult() {
+        return botDifficult;
+    }
+
+    public void setBotDifficult(BotDifficult botDifficult) {
+        this.botDifficult = botDifficult;
     }
 }

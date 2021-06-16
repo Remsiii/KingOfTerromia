@@ -1,6 +1,7 @@
 package at.kaindorf;
 
 import at.kaindorf.beans.*;
+import at.kaindorf.enums.BotDifficult;
 import at.kaindorf.game.PlayGame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -41,7 +42,7 @@ public class GameScreen extends ScreenAdapter {
     private List<Texture> hpPlayer = new LinkedList<>();
     private Texture nextRoundButton;
     private List<Texture> round = new LinkedList<>();
-    private PlayGame playGame = new PlayGame();
+    private PlayGame playGame;
     private ImageButton nextRoundIB;
     private List<ImageButton> handCardsPlayerIB = new LinkedList<>();
     private List<ImageButton> handCardsPlayerIBBig = new LinkedList<>();
@@ -60,6 +61,16 @@ public class GameScreen extends ScreenAdapter {
     private Texture background;
 
     public GameScreen(String difficulty) {
+        BotDifficult difficult = BotDifficult.EASY;
+        switch (difficulty)
+        {
+            case "Easy": difficult = BotDifficult.EASY;
+                break;
+            case "Medium": difficult = BotDifficult.MEDIUM;
+                break;
+            case "Hard": difficult = BotDifficult.HARD;
+        }
+        playGame = new PlayGame(difficult);
         batch = new SpriteBatch();
 
         nextRoundButton = new Texture("next_Round_button.png");
