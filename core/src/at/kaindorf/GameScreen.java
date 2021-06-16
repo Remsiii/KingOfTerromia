@@ -59,7 +59,7 @@ public class GameScreen extends ScreenAdapter {
 
     private Texture background;
 
-    public GameScreen() {
+    public GameScreen(String difficulty) {
         batch = new SpriteBatch();
 
         nextRoundButton = new Texture("next_Round_button.png");
@@ -291,8 +291,8 @@ public class GameScreen extends ScreenAdapter {
                  */
                @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    handCardsPlayerIB.get(fIndex).setSize(240.0f, 300.0f);
-                    handCardsPlayerIB.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                    handCardsPlayerIB.get(fIndex).setSize(300.0f, 360.0f);
+                    handCardsPlayerIB.get(fIndex).setPosition(Gdx.graphics.getWidth()-300.0f, Gdx.graphics.getHeight()/2);
                 }
 
                @Override
@@ -345,8 +345,8 @@ public class GameScreen extends ScreenAdapter {
                  */
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    playedCardsPlayerAttack.get(fIndex).setSize(240.0f, 300.0f);
-                    playedCardsPlayerAttack.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                    playedCardsPlayerAttack.get(fIndex).setSize(300.0f, 360.0f);
+                    playedCardsPlayerAttack.get(fIndex).setPosition(Gdx.graphics.getWidth()-300.0f, Gdx.graphics.getHeight()/2);
                 }
 
                 @Override
@@ -384,8 +384,8 @@ public class GameScreen extends ScreenAdapter {
                  */
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    playedCardsPlayerDef.get(fIndex).setSize(240.0f, 300.0f);
-                    playedCardsPlayerDef.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                    playedCardsPlayerDef.get(fIndex).setSize(300.0f, 360.0f);
+                    playedCardsPlayerDef.get(fIndex).setPosition(Gdx.graphics.getWidth()-300.0f, Gdx.graphics.getHeight()/2);
                 }
 
                 @Override
@@ -422,8 +422,8 @@ public class GameScreen extends ScreenAdapter {
                  */
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    playedCardsPlayerRes.get(fIndex).setSize(240.0f, 300.0f);
-                    playedCardsPlayerRes.get(fIndex).setPosition(Gdx.graphics.getWidth()-240.0f, Gdx.graphics.getHeight()/2);
+                    playedCardsPlayerRes.get(fIndex).setSize(300.0f, 360.0f);
+                    playedCardsPlayerRes.get(fIndex).setPosition(Gdx.graphics.getWidth()-300.0f, Gdx.graphics.getHeight()/2);
                 }
 
                 @Override

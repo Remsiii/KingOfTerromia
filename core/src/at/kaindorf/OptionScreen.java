@@ -94,7 +94,8 @@ public class OptionScreen extends ScreenAdapter {
         screenMode.setItems("Fullscreen","Windowmode");
         screenMode.getStyle().listStyle.font.getData().scale(0.3f);
 
-        musicVol.setValue(1);
+        musicVol.setValue(MenuScreen.music.getVolume());
+
 
         //Table zum Anzeigen der Elemente
         optionTable.add(title).colspan(3).center();

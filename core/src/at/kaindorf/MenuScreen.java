@@ -113,7 +113,7 @@ public class MenuScreen extends ScreenAdapter {
         start.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y){
                 clickEffect.play();
-                KingOfTerromia.INSTANCE.setScreen(new GameScreen());
+                KingOfTerromia.INSTANCE.setScreen(new DifficultyScreen());
             }
         });
 
